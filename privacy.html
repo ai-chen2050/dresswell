@@ -1,106 +1,326 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" href="icon.png">
-<link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="icon.png" />
+    <link rel="stylesheet" href="style.css" />
 
-<!-- GEO:AUTO START -->
-<title>隐私政策 · 穿好衣</title>
-<meta name="description" content="两到三句的完整描述。这段会出现在 meta description、og:description、llms.txt 的摘要里——写给人看，也写给 AI 看。">
-<meta name="keywords" content="关键词1, 关键词2">
-<link rel="canonical" href="https://example.com/privacy.html">
-<link rel="alternate" hreflang="zh-CN" href="https://example.com/privacy.html">
-<link rel="alternate" hreflang="x-default" href="https://example.com/privacy.html">
-<meta property="og:type" content="website">
-<meta property="og:title" content="隐私政策 · 穿好衣">
-<meta property="og:description" content="两到三句的完整描述。这段会出现在 meta description、og:description、llms.txt 的摘要里——写给人看，也写给 AI 看。">
-<meta property="og:url" content="https://example.com/privacy.html">
-<meta property="og:image" content="https://example.com/icon.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#10c877">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "SoftwareApplication",
-      "@id": "https://example.com/#product",
-      "name": "穿好衣",
-      "description": "两到三句的完整描述。这段会出现在 meta description、og:description、llms.txt 的摘要里——写给人看，也写给 AI 看。",
-      "url": "https://example.com/",
-      "alternateName": [
-        "ai-dress-site"
-      ],
-      "operatingSystem": "iOS, Android",
-      "applicationCategory": "LifestyleApplication",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "CNY"
-      },
-      "author": {
-        "@type": "Organization",
-        "name": "top.chuanhaoyi",
-        "email": "you@example.com"
-      },
-      "featureList": [
-        "核心卖点一",
-        "核心卖点二"
-      ]
-    }
-  ]
-}
-</script>
-<!-- GEO:AUTO END -->
-</head>
-<body>
+    <!-- 下面这一段由 tools/gen_geo.py 从 site.config.json 生成，勿手改 -->
+    <!-- GEO:AUTO START -->
+    <title>隐私政策 · 穿好衣</title>
+    <meta
+      name="description"
+      content="穿好衣隐私政策：不收集任何个人数据，无账号无服务器；说明本地存储范围、可选 iCloud 备份，以及自带 Key 场景下照片会发往你自己选择的服务商。"
+    />
+    <meta
+      name="keywords"
+      content="虚拟试衣, 3D 试衣间, 数字衣橱, 穿搭搭配, 试衣 App, 离线, 隐私, 捏脸, 衣橱管理, AI 搭配师"
+    />
+    <link rel="canonical" href="https://chuanhaoyi.top/privacy.html" />
+    <link
+      rel="alternate"
+      hreflang="zh-CN"
+      href="https://chuanhaoyi.top/privacy.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href="https://chuanhaoyi.top/privacy.en.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://chuanhaoyi.top/privacy.html"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="隐私政策 · 穿好衣" />
+    <meta
+      property="og:description"
+      content="穿好衣隐私政策：不收集任何个人数据，无账号无服务器；说明本地存储范围、可选 iCloud 备份，以及自带 Key 场景下照片会发往你自己选择的服务商。"
+    />
+    <meta property="og:url" content="https://chuanhaoyi.top/privacy.html" />
+    <meta property="og:image" content="https://chuanhaoyi.top/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#2EBD85" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://chuanhaoyi.top/#product",
+            "name": "穿好衣",
+            "description": "穿好衣把你的身材和你真实的衣服重建成可以转着看的 3D：捏出自己的身形与五官，拍一张衣服照片就能穿到身上，外套、上衣、裙子自由叠穿。重建、渲染、换装全部在手机本地完成，衣柜和身材数据不上传。",
+            "url": "https://chuanhaoyi.top/",
+            "alternateName": ["DressWell", "穿好衣", "ai-dress"],
+            "operatingSystem": "iOS, Android",
+            "applicationCategory": "LifestyleApplication",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "CNY"
+            },
+            "author": {
+              "@type": "Organization",
+              "name": "chuanhaoyi",
+              "email": "blake.chen94@gmail.com"
+            },
+            "featureList": [
+              "真 3D：转着看，不是等一张图",
+              "真身材：告诉你合不合身，而不是把你 P 好看",
+              "拍一张，你的衣服进 3D 衣柜",
+              "真隐私：没有服务器，没有账号",
+              "把你的包扫进 3D（iPhone Pro）",
+              "搭配师跑在你自己的 Key 上"
+            ]
+          }
+        ]
+      }
+    </script>
+    <!-- GEO:AUTO END -->
 
-<nav><div class="wrap" style="display:flex;align-items:center;gap:20px;height:60px">
-  <a class="brand" href="index.html">穿好衣</a>
-  <span style="flex:1"></span><a href="index.html">首页</a>
-</div></nav>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t === "dark" || t === "light")
+            document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <nav>
+      <div class="wrap">
+        <a class="brand" href="index.html">穿好衣</a>
+        <span class="spacer"></span>
+        <a href="geo.html" class="hide-sm">常见问题</a>
+        <a href="support.html">技术支持</a>
+        <a href="index.en.html">EN</a>
+        <a href="#" id="theme-toggle" title="切换主题">◐</a>
+      </div>
+    </nav>
 
-<main class="wrap prose">
-<h1>隐私政策</h1>
-<p class="lead">生效日期：2026-09-02</p>
+    <main class="wrap prose">
+      <p class="kicker">隐私政策</p>
+      <h1>不收集，所以没什么可泄露的</h1>
+      <p class="updated">
+        生效日期：2026-09-02 · 适用于穿好衣（DressWell）iOS 与 Android 版
+      </p>
 
-<blockquote>各大应用商店都要求提供**可公网访问**的隐私政策 URL，这一页就是那个 URL。
-内容必须与代码事实一致 —— 声明"不收集"却带着埋点 SDK 是下架级风险。</blockquote>
+      <h2>1. 我们收集什么</h2>
+      <p>
+        <strong>不收集任何个人信息。</strong
+        >穿好衣没有账号系统，不需要注册或登录，
+        也没有开发者持有的服务器。我们不做用户行为埋点，不接入广告或分析 SDK，
+        不读取通讯录、位置、设备标识用于画像。
+      </p>
+      <p>
+        换句话说，我们这边没有一份关于你的档案 —— 不是承诺不看，是根本没有。
+      </p>
 
-<h2>1. 我们收集什么</h2>
-<p>TODO 如实写。如果确实不收集，就明确写"不收集任何个人信息"，
-并说明数据存在哪（设备本地 / 用户自己的 iCloud）。</p>
+      <h2>2. 你的数据存在哪</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>数据</th>
+            <th>存放位置</th>
+            <th>是否离开设备</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>3D 形象参数（身高、体型、五官、肤色）</td>
+            <td>应用私有沙盒</td>
+            <td>否</td>
+          </tr>
+          <tr>
+            <td>造型存档与缩略图</td>
+            <td>应用私有沙盒</td>
+            <td>否</td>
+          </tr>
+          <tr>
+            <td>你上传的衣服照片与生成的布料贴图</td>
+            <td>应用私有沙盒</td>
+            <td>否</td>
+          </tr>
+          <tr>
+            <td>用于让形象更像你的那张照片</td>
+            <td>应用私有沙盒</td>
+            <td>否（除下条情形）</td>
+          </tr>
+          <tr>
+            <td>可选的 iCloud 备份</td>
+            <td>你本人的 iCloud 私有容器</td>
+            <td>仅在你的 Apple 账号内，开发者无权访问</td>
+          </tr>
+          <tr>
+            <td>你自己配置的模型 API Key</td>
+            <td>应用私有沙盒</td>
+            <td>否。也不写进日志</td>
+          </tr>
+        </tbody>
+      </table>
 
-<h2>2. 数据存储位置</h2>
-<p>TODO</p>
+      <h2>3. 唯一会有数据离开设备的情形：你自带的 AI 服务</h2>
+      <p>
+        穿好衣的 AI 功能采用「自带
+        Key」（BYOK）模式：只有当你<strong>主动</strong>在 「设置 → AI
+        服务」里填写了自己的大模型服务地址与密钥之后，相关功能才可用。此时：
+      </p>
+      <ul>
+        <li>
+          请求（可能包含一张你选择的照片，或一段你当前穿戴的文字描述）
+          <strong>直接发往你填写的那个服务商地址</strong>；
+        </li>
+        <li>
+          数据的留存与使用由<strong>该服务商的隐私政策</strong>决定，请自行阅读；
+        </li>
+        <li>
+          我们不持有你的密钥、不做任何中转或代理，因此这些请求的内容我们也看不到；
+        </li>
+        <li>不填写密钥时，应用完整可用，所有涉及 AI 的步骤都退回手动操作。</li>
+      </ul>
+      <p>
+        付费的搭配师技能包卖的是打包好的提示词模板，<strong
+          >不包含 AI 推理额度</strong
+        >， 推理始终跑在你自己的账号上。
+      </p>
 
-<h2>3. 第三方服务</h2>
-<p>TODO 逐个列出：名称、用途、它会拿到什么。
-用户自带 API Key（BYOK）的场景要**如实说明请求会发往用户选择的服务商** ——
-含糊其辞比不说更危险。没有第三方服务就明确写"无"。</p>
+      <h2>4. 第三方 SDK 清单</h2>
+      <p>用于支付与商店能力，均由平台方提供，且只在对应渠道的安装包中启用：</p>
+      <table>
+        <thead>
+          <tr>
+            <th>组件</th>
+            <th>用途</th>
+            <th>它会拿到什么</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Apple StoreKit（iOS）</td>
+            <td>App 内购买、恢复购买</td>
+            <td>由 Apple 处理交易，我们只收到「已购买 / 未购买」</td>
+          </tr>
+          <tr>
+            <td>Google Play Billing（Google Play 版）</td>
+            <td>同上</td>
+            <td>由 Google 处理交易，同上</td>
+          </tr>
+          <tr>
+            <td>华为 IAP（华为应用市场版）</td>
+            <td>同上</td>
+            <td>由华为处理交易，同上</td>
+          </tr>
+          <tr>
+            <td>Apple iCloud（可选）</td>
+            <td>形象与自定义衣服的备份</td>
+            <td>写入你本人的私有容器，开发者无权访问</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        <strong>没有</strong>广告 SDK、<strong>没有</strong>分析或崩溃上报 SDK、
+        <strong>没有</strong>开发者自建的后端接口。
+      </p>
 
-<h2>4. 权限用途</h2>
-<table>
-  <thead><tr><th>权限</th><th>用途</th><th>是否必需</th></tr></thead>
-  <tbody><tr><td>TODO 相机</td><td>TODO 具体用途</td><td>可选</td></tr></tbody>
-</table>
-<p>权限文案要写**具体用途**。"用于提供更好的服务"这类表述会在 App Store 审核被拒。</p>
+      <h2>5. 权限用途</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>权限</th>
+            <th>具体用途</th>
+            <th>是否必需</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>相机</td>
+            <td>
+              拍摄你的衣服做成可试穿的 3D 款式；在支持的 iPhone
+              上环绕拍摄小物进行端上重建
+            </td>
+            <td>可选，用到时才请求</td>
+          </tr>
+          <tr>
+            <td>相册</td>
+            <td>从相册选择衣服照片，提取颜色与花纹</td>
+            <td>可选，用到时才请求</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        两项都是<strong>本机处理、不上传</strong>。拒绝授权只影响对应功能，
+        试衣间与内置衣物照常使用。
+      </p>
 
-<h2>5. 数据删除</h2>
-<p>TODO 说清用户怎么删除自己的数据（应用内操作路径 / 卸载即删除）。</p>
+      <h2>6. 怎么删除你的数据</h2>
+      <ul>
+        <li>
+          应用内「设置 →
+          隐私」可以逐项删除：造型存档、上传的衣服、用于捏形象的照片。
+          删除是本机的、立即生效的。
+        </li>
+        <li>卸载应用会一并清除沙盒内的全部内容。</li>
+        <li>
+          开启过 iCloud 备份的话，还需要在系统「设置 → Apple 账号 → iCloud」里
+          删除本应用的数据。
+        </li>
+      </ul>
+      <p>
+        因为我们不持有你的数据，所以无需向我们提交删除申请 —— 也无从代你删除。
+      </p>
 
-<h2>6. 儿童隐私</h2>
-<p>TODO</p>
+      <h2>7. 儿童隐私</h2>
+      <p>
+        本应用不面向 13 岁以下儿童，也不会有意收集儿童的个人信息。
+        由于我们不收集任何个人信息，也不存在需要监护人同意后处理的数据。
+      </p>
 
-<h2>7. 政策变更</h2>
-<p>本政策如有变更，会更新本页并修改上方生效日期。</p>
+      <h2>8. 政策变更</h2>
+      <p>
+        本政策如有变更，会更新本页并修改上方生效日期。涉及数据处理方式的实质变更，
+        会在应用内显著位置提示。
+      </p>
 
-<h2>8. 联系我们</h2>
-<p>TODO 邮箱（与 site.config.json 的 author.email 一致）</p>
-</main>
+      <h2>9. 联系我们</h2>
+      <p>
+        隐私相关问题请邮件联系
+        <a href="mailto:blake.chen94@gmail.com">blake.chen94@gmail.com</a>。
+      </p>
+    </main>
 
-<footer><div class="wrap"><p>© top.chuanhaoyi</p></div></footer>
-</body>
+    <footer>
+      <div class="wrap">
+        <div class="fnav">
+          <a href="index.html">首页</a>
+          <a href="geo.html">常见问题</a>
+          <a href="support.html">技术支持</a>
+          <a href="privacy.html">隐私政策</a>
+          <a href="terms.html">用户协议</a>
+          <a href="index.en.html">EN</a>
+        </div>
+        <p class="fine">
+          © chuanhaoyi · 穿好衣（DressWell） ·
+          <a href="mailto:blake.chen94@gmail.com">blake.chen94@gmail.com</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      document
+        .getElementById("theme-toggle")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          var cur = document.documentElement.getAttribute("data-theme");
+          var next = cur === "dark" ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", next);
+          try {
+            localStorage.setItem("theme", next);
+          } catch (err) {}
+        });
+    </script>
+  </body>
 </html>

@@ -51,5 +51,6 @@ Allow: /
 User-agent: Meta-ExternalAgent
 Allow: /
 
-Sitemap: https://example.com/sitemap.xml
-Sitemap: https://example.com/llms.txt
+Sitemap: https://chuanhaoyi.top/sitemap.xml
+Sitemap: https://chuanhaoyi.top/llms.txt
+Sitemap: https://chuanhaoyi.top/llms.en.txt

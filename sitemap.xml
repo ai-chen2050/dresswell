@@ -2,61 +2,99 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://example.com/index.html</loc>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/index.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/index.en.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/index.html"/>
+    <loc>https://chuanhaoyi.top/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/index.html"/>
     <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://example.com/index.en.html</loc>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/index.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/index.en.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/index.html"/>
+    <loc>https://chuanhaoyi.top/index.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/index.html"/>
     <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://example.com/geo.html</loc>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/geo.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/geo.en.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/geo.html"/>
+    <loc>https://chuanhaoyi.top/geo.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/geo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/geo.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/geo.html"/>
     <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://example.com/geo.en.html</loc>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/geo.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/geo.en.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/geo.html"/>
+    <loc>https://chuanhaoyi.top/geo.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/geo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/geo.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/geo.html"/>
     <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://example.com/devlog.html</loc>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/devlog.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/devlog.html"/>
+    <loc>https://chuanhaoyi.top/devlog.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/devlog.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/devlog.html"/>
     <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://example.com/support.html</loc>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/support.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/support.html"/>
+    <loc>https://chuanhaoyi.top/support.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/support.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/support.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/support.html"/>
     <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://example.com/privacy.html</loc>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/privacy.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/privacy.html"/>
+    <loc>https://chuanhaoyi.top/support.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/support.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/support.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/support.html"/>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://chuanhaoyi.top/privacy.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/privacy.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/privacy.html"/>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://chuanhaoyi.top/privacy.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/privacy.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/privacy.html"/>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://chuanhaoyi.top/terms.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/terms.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/terms.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/terms.html"/>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://chuanhaoyi.top/terms.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/terms.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/terms.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/terms.html"/>
     <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

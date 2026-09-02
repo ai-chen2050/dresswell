@@ -37,6 +37,20 @@ def read(p):
         return f.read()
 
 
+def vals(v):
+    """面向用户的文本可能写成 {lang: text}（见 gen_geo.py 的 t）。
+    统一摊平成字符串列表，好逐门语言检查 —— 只查默认语言的话，
+    英文那份缺了或者留着占位符都查不出来。"""
+    if isinstance(v, dict):
+        return [x for x in v.values() if isinstance(x, str)]
+    return [v] if isinstance(v, str) else []
+
+
+def any_blank(v):
+    got = vals(v)
+    return (not got) or any(not x.strip() for x in got)
+
+
 def check_config():
     p = os.path.join(ROOT, "site.config.json")
     if not os.path.exists(p):
@@ -47,16 +61,19 @@ def check_config():
     s = conf.get("site", {})
     if "example.com" in s.get("domain", ""):
         err("site.domain 还是 example.com —— canonical/sitemap/llms.txt 全部指向错误地址")
-    if not s.get("description", "").strip():
-        err("site.description 为空 —— 这是 AI 摘要你的主要素材")
+    if any_blank(s.get("description")):
+        err("site.description 为空（或缺某门语言）—— 这是 AI 摘要你的主要素材")
     for i, f in enumerate(conf.get("faq", [])):
-        if f.get("q") and not (f.get("a") or "").strip():
-            err(f"faq[{i}] 「{f['q']}」没有答案 —— 空答案会进 JSON-LD，是负面信号")
-    if any("关键词" in k for k in conf.get("keywords", [])):
+        if f.get("q") and any_blank(f.get("a")):
+            err(f"faq[{i}] 「{vals(f['q'])[0] if vals(f['q']) else i}」缺答案"
+                f"（或缺某门语言）—— 空答案会进 JSON-LD，是负面信号")
+    kw = conf.get("keywords", [])
+    kw_all = [k for v in kw.values() for k in v] if isinstance(kw, dict) else kw
+    if any("关键词" in k for k in kw_all):
         warn("keywords 里还有占位文本")
     for f in conf.get("features", []):
-        if f.get("name") and not (f.get("detail") or f.get("summary")):
-            warn(f"功能「{f['name']}」没有描述，llms-full.txt 里会是空条目")
+        if f.get("name") and any_blank(f.get("detail")) and any_blank(f.get("summary")):
+            warn(f"功能「{vals(f['name'])[0]}」没有描述，llms-full.txt 里会是空条目")
     return conf
 
 

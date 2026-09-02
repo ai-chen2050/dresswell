@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../icon.png">
+<title>为什么走真 3D，而不是让模型生成一张试穿图 · 穿好衣</title>
+<meta name="description" content="生成一张 2D 试穿图更省事、也更容易讨人喜欢。选实时 3D 是为了三件生成路线给不了的东西：任意角度、可叠穿、以及数据不出手机。这篇写清这个取舍和它的代价。">
+<link rel="canonical" href="https://chuanhaoyi.top/devlog/01-why-real-3d.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么走真 3D，而不是让模型生成一张试穿图">
+<meta property="og:description" content="生成一张 2D 试穿图更省事、也更容易讨人喜欢。选实时 3D 是为了三件生成路线给不了的东西：任意角度、可叠穿、以及数据不出手机。这篇写清这个取舍和它的代价。">
+<meta property="og:url" content="https://chuanhaoyi.top/devlog/01-why-real-3d.html">
+<link rel="stylesheet" href="../style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "为什么走真 3D，而不是让模型生成一张试穿图",
+  "description": "生成一张 2D 试穿图更省事、也更容易讨人喜欢。选实时 3D 是为了三件生成路线给不了的东西：任意角度、可叠穿、以及数据不出手机。这篇写清这个取舍和它的代价。",
+  "url": "https://chuanhaoyi.top/devlog/01-why-real-3d.html",
+  "inLanguage": "zh-CN",
+  "publisher": {
+    "@type": "Organization",
+    "name": "穿好衣"
+  },
+  "datePublished": "2026-09-02",
+  "keywords": "架构, 3D, 隐私, 独立开发"
+}
+</script>
+</head>
+<body>
+<nav class="wrap"><a class="brand" href="../index.html">穿好衣</a>
+  <a href="../devlog.html">开发日记</a></nav>
+<main class="wrap prose">
+<p class="kicker">开发日记 · 2026-09-02</p><h1>为什么走真 3D，而不是让模型生成一张试穿图</h1><p class="lead">生成一张 2D 试穿图更省事、也更容易讨人喜欢。选实时 3D 是为了三件生成路线给不了的东西：任意角度、可叠穿、以及数据不出手机。这篇写清这个取舍和它的代价。</p><h2 id="结论先说">结论先说</h2>
+<p>穿好衣用设备上的实时 3D，而不是云端生成 2D 试穿图。代价是安装包更大、 对显卡有要求、衣服的垂坠只是几何近似；换来的是三件生成路线给不了的东西： <strong>任意角度看同一套搭配、真正的叠穿层次、以及你的身材和衣柜数据不出手机。</strong></p>
+<h2 id="背景">背景</h2>
+<p>「虚拟试穿」现在有两条主流路线。</p>
+<p>一条是生成式的：你上传正脸照和全身照，云端模型生成一张「你穿上这件」的图。 它的长处很实在 —— 出图像你本人的一张美照，光影自然，几乎不需要用户动手。</p>
+<p>另一条是把人和衣服都做成 3D，在设备上渲染。这条路一开始就更难： 要有参数化人体、要有能挂到骨架上的衣服网格、要处理衣服之间的遮挡关系。</p>
+<p>一个人做，理性选择本该是第一条。选第二条是因为有几个问题第一条结构性地解决不了。</p>
+<h2 id="考虑过的方案">考虑过的方案</h2>
+<ol><li><strong>云端生成 2D</strong> —— 开发快、效果讨喜；但每换一个角度要重新生成一次，</li></ol>
+<p>叠穿时「外套里面那条裙子长什么样」只能靠模型自由发挥， 而且用户的正脸照和整个衣柜上云是产品前提。</p>
+<ol><li><strong>设备上实时 3D</strong> —— 开发慢，资产成本高；但角度免费、叠穿是算出来的、</li></ol>
+<p>数据不用离开设备。</p>
+<h2 id="最后怎么选的">最后怎么选的</h2>
+<p>选 3D，判据是这三个问题：</p>
+<p><strong>换个角度要不要重新等一次？</strong> 试衣服的真实动作是转身看背面、低头看腰线。 2D 生成里每个角度都是一次新的请求；3D 里角度是免费的。</p>
+<p><strong>叠穿能不能算出来？</strong> 外套压住上衣、上衣塞进裙子、袜子在鞋里 —— 这些是几何关系。 在 3D 里可以逐顶点判断哪块面被挡住并把它藏掉，任意组合都自洽。 在生成路线里，这些关系每次都要靠模型重新想象一遍。</p>
+<p><strong>身材数据要不要上云？</strong> 这一条最后成了产品定位。3D 让「无服务器」成为可能： 重建、渲染、换装全在本机，我们这边不需要、也确实没有一份关于用户的数据。</p>
+<h2 id="做错的部分">做错的部分</h2>
+<p><strong>帽子的落位算法返工了三次。</strong> 第一版用高度场，偏 10cm；第二版换星凸表加二分， 偏 12cm；第三版才用竖直射线的奇偶判断，从「帽顶低于颅顶 2cm」往上找到刚好不内嵌的位置。 现在渔夫帽、毛线帽、钟形帽在 2cm 内，但圆顶礼帽偏 39mm、遮阳帽 71mm、毛绒帽 172mm —— 高冠、宽檐、毛绒松垂的帽形，帽顶离头本来就远，这条规则的起点就错了。</p>
+<p><strong>头发和帽子的关系删过一次面。</strong> 一开始把被帽子盖住的头发面直接删掉， 结果帽檐和连衣帽内壁开始露头皮。改成把那些顶点沿射线顶到帽子内侧之后才对 —— 藏起来，不要删掉。</p>
+<p><strong>把几何计算留在了 UI 线程上太久。</strong> 塞衣服要打十几万次射线，加上藏面和合并字节， 同步跑要三到六秒。戴帽子比换衣服多一道头发处理，正好越过安卓五秒的无响应线， 用户看到的是系统弹窗说应用没有响应。搬到后台线程时又踩了 Dart 的闭包上下文问题： 方法体里的小闭包会把同作用域其它闭包捉住的东西一起打包发过去， 真机直接报参数无效，而单元测试因为写法不同全绿。</p>
+<h2 id="如果重来">如果重来</h2>
+<p><strong>几何管线从第一天就写成纯函数。</strong> 输入输出都是字节、不碰界面状态 —— 这样它天然能在后台线程跑，也天然能在没有渲染引擎的环境里测试。 我们是先写成了和界面缠在一起的样子，后来才抽出来的， 中间那次无响应弹窗完全可以避免。</p><p class="pager"></p><p><a href="../devlog.html">← 全部开发日记</a></p>
+</main>
+<footer class="wrap"><p>© chuanhaoyi</p></footer>
+</body>
+</html>

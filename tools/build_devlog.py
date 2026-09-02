@@ -55,6 +55,14 @@ def s(lang, key):
     return STR.get(lang, STR["en"]).get(key, key)
 
 
+def t(v, lang, fallback=""):
+    """site.config.json 里面向用户的文本可以写成 {lang: text}（见 gen_geo.py 的 t）。
+    这里按语言取，取不到退回配置里的第一门语言；裸字符串原样返回。"""
+    if not isinstance(v, dict):
+        return v or fallback
+    return v.get(lang) or next(iter(v.values()), fallback)
+
+
 def suffix_of(lang):
     for l in LOCALES:
         if l["code"] == lang:
@@ -171,7 +179,7 @@ def shell(lang, title, desc, canonical, body, extra_ld=None):
         "description": desc,
         "url": canonical,
         "inLanguage": lang,
-        "publisher": {"@type": "Organization", "name": SITE["name"]},
+        "publisher": {"@type": "Organization", "name": t(SITE["name"], lang)},
     }
     if extra_ld:
         ld.update(extra_ld)
@@ -181,7 +189,7 @@ def shell(lang, title, desc, canonical, body, extra_ld=None):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="../{SITE.get('icon', 'icon.png')}">
-<title>{_html.escape(title)} · {_html.escape(SITE['name'])}</title>
+<title>{_html.escape(title)} · {_html.escape(t(SITE['name'], lang))}</title>
 <meta name="description" content="{_html.escape(desc)}">
 <link rel="canonical" href="{canonical}">
 <meta property="og:type" content="article">
@@ -194,7 +202,7 @@ def shell(lang, title, desc, canonical, body, extra_ld=None):
 </script>
 </head>
 <body>
-<nav class="wrap"><a class="brand" href="../index{suffix_of(lang)}.html">{_html.escape(SITE['name'])}</a>
+<nav class="wrap"><a class="brand" href="../index{suffix_of(lang)}.html">{_html.escape(t(SITE['name'], lang))}</a>
   <a href="../devlog{suffix_of(lang)}.html">{s(lang, 'kicker')}</a></nav>
 <main class="wrap prose">
 {body}
@@ -253,7 +261,7 @@ def build():
                     f'<ul class="postlist">{items}</ul>')
         idx_name = f"devlog{suffix_of(lang)}.html"
         idx_html = shell(lang, s(lang, "index_h1"),
-                         SITE["description"], f"{DOMAIN}/{idx_name}", idx_body)
+                         t(SITE["description"], lang), f"{DOMAIN}/{idx_name}", idx_body)
         # 索引页在根目录，相对路径要少一层
         idx_html = idx_html.replace('href="../', 'href="').replace('src="../', 'src="')
         with open(os.path.join(ROOT, idx_name), "w", encoding="utf-8") as f:

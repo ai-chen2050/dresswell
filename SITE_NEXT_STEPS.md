@@ -1,65 +1,58 @@
-# SITE_NEXT_STEPS · 穿好衣 官网
+# 还差什么
 
-生成于 2026-09-02。做完划掉，全清空后删掉本文件。
+脚手架的初始待办已经做完（配置、六个页面 × 两门语言、图标、og 图、GEO 层）。
+`make geo-check` 目前通过，只剩一个可忽略的提示（开发日记只有中文，没有 hreflang）。
 
-## 1. 配置（先做这个，其它都从它生成）
+下面是**真正还没做**的。
 
-- [ ] `site.config.json` → `site.domain` 换成真实域名
-      （**还是 example.com 的话 canonical / sitemap / llms.txt 全指向错地址**）
-- [ ] `site.type`：应用填 `SoftwareApplication`，游戏填 `VideoGame`
-- [ ] `site.description` —— 两三句，写给人也写给 AI，要和商店描述口径一致
-- [ ] `features` —— 每条都要有 `detail`，空条目会进 llms-full.txt
-- [ ] `faq` —— **每个问题都要有完整答案**，空答案是明确的负面信号
-- [ ] `differentiators` —— 对比表，AI 回答"X 和 Y 的区别"时直接引用
-- [ ] `citationTriggers` —— 你希望在哪些提问下被推荐（写用户真会问的原话）
-- [ ] `links` —— 上架后填各渠道地址，没有的留空字符串
+## 1. 上线前必须做
 
-## 2. 页面文本
+- [ ] **域名解析。** `site.config.json` 里写的是 `https://chuanhaoyi.top`，
+      canonical、sitemap、llms.txt 全按它生成。域名要真的指到这个站，
+      否则那些绝对地址全是错的。
+- [ ] **GitHub Pages 用自定义域名要加 `CNAME` 文件**（内容就一行域名，无协议）。
+      仓库 Settings → Pages → Source 选 “GitHub Actions”，工作流已就位。
+- [ ] **首页缺产品图。** 现在整站是纯排版，没有一张 3D 试穿画面 ——
+      对一个卖“看得见的效果”的产品，这是最大的短板。
+      ⚠️ 别直接用现有的真机截图：左下角有 `FPS / ISO` 调试浮层，
+      而且抓到的帧率是个位数，放出去是负面素材。需要的是：
+      关掉调试浮层、正常帧率下重新抓一组（正面 / 背面 / 拉近细节），
+      以及 `docs/MARKETING.md` 里点名的那段**一镜到底转体视频** ——
+      那是 2D 竞品做不出来的素材，也是这个站最该有的东西。
+      放进 `shots/`，在首页 hero 和「核心能力」之间引用。
+- [ ] **商店链接。** 上架后把 `links.appStore` / `googlePlay` / `huawei` 填上，
+      跑 `make geo` 同步。首页那两颗 CTA 现在写的是「即将上架」且不可点，
+      填了链接之后要把 `aria-disabled` 去掉并指向真实地址。
 
-- [ ] `index.html` 的 TODO 全部换掉
-- [ ] `geo.html` —— 这是 GEO 主战场，把机制写具体（步骤、优先级、数字）
-- [ ] `privacy.html` —— 必须与代码事实一致，商店会核对
-- [ ] `support.html` —— 邮箱、常见问题
-- [ ] 英文版 `index.en.html` / `geo.en.html` —— **重写而非直译**
-- [ ] 各页 title / description 各不相同
+## 2. 内容还可以加
 
-## 3. 资源
+- [ ] 开发日记只有一篇中文。英文站现在指向的是同一个中文索引 ——
+      写一篇 `lang: en` 的进 `devlog/src/`，索引会自动分语言出页。
+- [ ] `citationTriggers` 建议上线后按真实搜索词回填（能拿到搜索来源数据的话）。
 
-- [ ] `icon.png`（512×512 起）
-- [ ] 截图放 `shots/`，在首页引用
-- [ ] og 图（社交分享缩略图，建议 1200×630）
+## 3. 长期维护的规矩
 
-## 4. 生成与体检
+- **改文案先改 `site.config.json`，再 `make build`。** llms.txt / llms-full.txt /
+  sitemap.xml / robots.txt / 各页 `<head>` 都是生成物，手改会在下次生成时被覆盖。
+- **页面正文里的 FAQ 要和配置里的 `faq` 一致。** 结构化数据和可见文本不一致
+  会被判为不一致内容。改答案时两边一起改。
+- **和 App 仓库对齐口径。** 这个站的卖点、定价、隐私说法要和
+  `ai-dress/doc/APP_STORE_SUBMISSION.md`、`ai-dress/docs/IAP.md` 一致。
+  三处说法不一致，AI 会降低引用意愿，商店审核也会挑。
+- ⚠️ **华为渠道的商店页文案不能出现 AI / IA 字样**（缺算法备案资质，
+  见 `ai-dress/docs/HUAWEI_LAUNCH.md` 第 8 节）。这个站是给 App Store /
+  Google Play 和自然搜索看的，可以正常提 AI；**别把这里的文案直接搬去华为后台。**
 
-```bash
-make build        # devlog + geo
-make geo-check    # 必须全绿
-make serve        # http://localhost:4000 看一眼
-```
+## 4. 这个站在脚手架之外改了什么
 
-- [ ] `geo-check` 无 error
-- [ ] 明暗两色都看过
-- [ ] 手机宽度下不横向滚动
+`app-ai-creator` 的 site 模板原本只把**页面标题**分语言，其余（描述、卖点、FAQ、
+关键词、产品名）都是单语字符串，于是英文页会拿到中文的 meta description 和
+中文的 FAQ 结构化数据。这个站把三个工具都改成了语言感知：
 
-## 5. 部署
+- `tools/gen_geo.py`：面向用户的字段都过 `t()`（写成 `{lang: text}` 或裸字符串都行）；
+  `llms.txt` / `llms-full.txt` **每门语言各出一份**（`llms.en.txt`），
+  连章节标签也跟着换语言；新增 `pages[].description` 支持逐页描述。
+- `tools/build_devlog.py`：同样支持 `{lang: text}`。
+- `tools/geo_check.py`：改成逐门语言检查，缺某一门也会报出来。
 
-- [ ] 推到 GitHub
-- [ ] 仓库 Settings → Pages → Source 选 **GitHub Actions**
-- [ ] 自定义域名：Settings → Pages → Custom domain，并在 DNS 加 CNAME
-- [ ] 部署后线上验：
-      ```bash
-      curl -s https://你的域名/llms.txt | head -20
-      curl -sI https://你的域名/ | head -5
-      ```
-
-## 6. 接进发版流程
-
-- [ ] 在产品仓库的发版清单里确认有"同步官网"这一步
-- [ ] 每次发版跑 `/geo-refresh <产品仓路径>`
-
-## 7. 持续
-
-- [ ] 每月在 ChatGPT / Claude / Perplexity 里问一遍 `citationTriggers` 里的问题，
-      记录会不会提到你、信息对不对
-- [ ] 每次有值得讲的技术决策就写一篇开发日记（`/devlog-new`）——
-      长内容才是被 AI 引用的主体
+这几处改动值得回流到 `app-ai-creator/templates/site/`，那边还是单语版本。
