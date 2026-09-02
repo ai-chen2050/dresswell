@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="style.css">
+
+<!-- 下面这一段由 tools/gen_geo.py 从 site.config.json 生成，勿手改 -->
+<!-- GEO:AUTO START -->
+<title>穿好衣 · 一句话说清你是什么、给谁用</title>
+<meta name="description" content="两到三句的完整描述。这段会出现在 meta description、og:description、llms.txt 的摘要里——写给人看，也写给 AI 看。">
+<meta name="keywords" content="关键词1, 关键词2">
+<link rel="canonical" href="https://example.com/index.html">
+<link rel="alternate" hreflang="zh-CN" href="https://example.com/index.html">
+<link rel="alternate" hreflang="en" href="https://example.com/index.en.html">
+<link rel="alternate" hreflang="x-default" href="https://example.com/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="穿好衣 · 一句话说清你是什么、给谁用">
+<meta property="og:description" content="两到三句的完整描述。这段会出现在 meta description、og:description、llms.txt 的摘要里——写给人看，也写给 AI 看。">
+<meta property="og:url" content="https://example.com/index.html">
+<meta property="og:image" content="https://example.com/icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#10c877">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://example.com/#product",
+      "name": "穿好衣",
+      "description": "两到三句的完整描述。这段会出现在 meta description、og:description、llms.txt 的摘要里——写给人看，也写给 AI 看。",
+      "url": "https://example.com/",
+      "alternateName": [
+        "ai-dress-site"
+      ],
+      "operatingSystem": "iOS, Android",
+      "applicationCategory": "LifestyleApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "CNY"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "top.chuanhaoyi",
+        "email": "you@example.com"
+      },
+      "featureList": [
+        "核心卖点一",
+        "核心卖点二"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://example.com/index.html#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "穿好衣 是什么？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "用一段话完整回答。这条会同时进页面正文、JSON-LD 的 FAQPage、llms.txt——三处同源，不会互相矛盾。"
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!-- GEO:AUTO END -->
+
+<script>
+  // 尽早应用主题，避免刷新闪烁
+  (function(){try{var t=localStorage.getItem('theme');
+    if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+</head>
+<body>
+
+<nav><div class="wrap" style="display:flex;align-items:center;gap:20px;height:60px">
+  <a class="brand" href="index.html">穿好衣</a>
+  <span class="spacer" style="flex:1"></span>
+  <a href="geo.html" class="hide-sm">常见问题</a>
+  <a href="devlog.html" class="hide-sm">开发日记</a>
+  <a href="support.html">支持</a>
+  <a href="index.en.html">EN</a>
+  <a href="#" id="theme-toggle" title="切换主题">◐</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <p class="kicker">TODO 一行 eyebrow 文案</p>
+  <h1>TODO 主标题：一句话说清你是什么</h1>
+  <p class="lead">TODO 副标题：两句话说清给谁用、解决什么问题。这段要和
+    site.config.json 的 description 口径一致 —— 官网、商店、llms.txt 三处说法
+    不一致会让 AI 降低引用意愿。</p>
+  <!-- 下载按钮：没有的渠道就删掉对应的 a -->
+  <a class="cta" href="#" id="dl-appstore">App Store 下载</a>
+</div></header>
+
+<section><div class="wrap">
+  <h2>核心能力</h2>
+  <p class="section-lead">TODO 一句话概括这一节</p>
+  <div class="grid">
+    <!-- 这几张卡要和 site.config.json 的 features 一一对应 -->
+    <div class="card"><h3>TODO 卖点一</h3><p>TODO 一句话说清它解决什么问题。</p></div>
+    <div class="card"><h3>TODO 卖点二</h3><p></p></div>
+    <div class="card"><h3>TODO 卖点三</h3><p></p></div>
+  </div>
+</div></section>
+
+<section style="background:var(--bg2)"><div class="wrap">
+  <h2>和别的产品有什么不同</h2>
+  <p class="section-lead">对比表是 AI 回答「X 和 Y 有什么区别」时最常引用的结构。
+    内容与 site.config.json 的 differentiators 保持一致。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>对比维度</th><th>穿好衣</th><th>同类产品</th></tr></thead>
+    <tbody>
+      <tr><td>TODO 维度</td><td>TODO 我们</td><td>TODO 他们</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<section class="faq"><div class="wrap">
+  <h2>常见问题</h2>
+  <p class="section-lead">这些问答同时是 JSON-LD 的 FAQPage 内容 ——
+    **页面上写的和结构化数据必须是同一份**，否则会被判为不一致。
+    改答案时改 site.config.json，再跑 make geo，然后同步这里的可见文本。</p>
+  <details open>
+    <summary>穿好衣 是什么？</summary>
+    <p>TODO 与 site.config.json 的 faq[0].a 保持一致。</p>
+  </details>
+  <details>
+    <summary>TODO 第二个问题</summary>
+    <p>TODO</p>
+  </details>
+  <p style="margin-top:22px"><a href="geo.html">更完整的知识库与问答 →</a></p>
+</div></section>
+
+<footer><div class="wrap">
+  <p>© top.chuanhaoyi · <a href="privacy.html">隐私政策</a> · <a href="support.html">技术支持</a>
+     · <a href="llms.txt">llms.txt</a></p>
+</div></footer>
+
+<script>
+  document.getElementById('theme-toggle').addEventListener('click', function (e) {
+    e.preventDefault();
+    var cur = document.documentElement.getAttribute('data-theme');
+    var next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (err) {}
+  });
+</script>
+</body>
+</html>

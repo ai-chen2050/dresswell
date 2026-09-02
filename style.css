@@ -1,0 +1,148 @@
+/* 穿好衣 官网样式。
+   设计令牌集中在 :root —— 改配色只改这里，不要在各处写死颜色。
+   明暗两套：跟随系统 + 手动切换（data-theme 覆盖）。 */
+
+:root {
+  --bg: #fbfdfc;
+  --bg2: #f1f8f5;
+  --ink: #0d221a;
+  --sub: #4a6a5d;
+  --card: #ffffff;
+  --line: #e0eee7;
+  --brand: #10c877;
+  --brand-deep: #08a862;
+  --shadow: 0 12px 36px rgba(10, 70, 48, .10);
+  --radius: 16px;
+  --maxw: 1000px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #07100c; --bg2: #0a1610; --ink: #e4f4ec; --sub: #8bb0a0;
+    --card: rgba(255,255,255,.045); --line: rgba(255,255,255,.09);
+    --brand: #2ee6a0; --brand-deep: #2ee6a0;
+    --shadow: 0 12px 36px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #07100c; --bg2: #0a1610; --ink: #e4f4ec; --sub: #8bb0a0;
+  --card: rgba(255,255,255,.045); --line: rgba(255,255,255,.09);
+  --brand: #2ee6a0; --brand-deep: #2ee6a0;
+  --shadow: 0 12px 36px rgba(0,0,0,.5);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", system-ui, sans-serif;
+  background: var(--bg); color: var(--ink); line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--brand-deep); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; height: auto; }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
+section { padding: 72px 0; }
+
+/* 顶栏 */
+nav {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: saturate(1.6) blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+nav.wrap, nav > .wrap {
+  display: flex; align-items: center; gap: 20px; height: 60px;
+}
+nav .brand { font-weight: 800; font-size: 17px; color: var(--ink); }
+nav .spacer { flex: 1; }
+nav a { font-size: 14px; font-weight: 600; color: var(--sub); }
+
+/* 主视觉 */
+.hero { padding: 84px 0 56px; background: linear-gradient(180deg, var(--bg2), var(--bg)); }
+.hero h1 { font-size: clamp(30px, 5vw, 48px); line-height: 1.25; letter-spacing: -.5px; }
+.hero .lead { font-size: 17px; color: var(--sub); margin-top: 16px; max-width: 60ch; }
+.cta {
+  display: inline-block; margin-top: 26px; padding: 14px 28px;
+  background: var(--brand); color: #04241a; font-weight: 800;
+  border-radius: 999px; box-shadow: var(--shadow);
+}
+.cta:hover { text-decoration: none; filter: brightness(1.06); }
+
+/* 卡片网格 */
+.grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 22px;
+}
+.card h3 { font-size: 17px; margin-bottom: 8px; }
+.card p { color: var(--sub); font-size: 15px; }
+
+h2 { font-size: clamp(22px, 3.4vw, 30px); margin-bottom: 8px; }
+.section-lead { color: var(--sub); margin-bottom: 28px; }
+
+/* FAQ —— 也是 JSON-LD FAQPage 的可见对应物，两者必须同源 */
+.faq details {
+  border-bottom: 1px solid var(--line); padding: 16px 0;
+}
+.faq summary { font-weight: 700; cursor: pointer; list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "＋"; float: right; color: var(--sub); }
+.faq details[open] summary::after { content: "－"; }
+.faq p { color: var(--sub); margin-top: 10px; }
+
+/* 表格 */
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font-weight: 800; }
+
+/* 长文 */
+.prose { padding: 48px 0 72px; max-width: 760px; }
+.prose h1 { font-size: clamp(26px, 4vw, 38px); margin: 6px 0 14px; }
+.prose h2 { margin: 34px 0 10px; }
+.prose h3 { margin: 24px 0 8px; font-size: 18px; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre { margin: 14px 0; }
+.prose ul, .prose ol { padding-left: 22px; }
+.prose blockquote {
+  border-left: 3px solid var(--brand); padding-left: 14px; color: var(--sub);
+}
+.prose code {
+  background: var(--bg2); padding: 2px 6px; border-radius: 6px;
+  font-size: .92em; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.prose pre {
+  background: var(--bg2); padding: 16px; border-radius: 12px; overflow-x: auto;
+  border: 1px solid var(--line);
+}
+.prose pre code { background: none; padding: 0; }
+.kicker { color: var(--brand-deep); font-weight: 800; font-size: 13px; letter-spacing: 1px; }
+.lead { color: var(--sub); font-size: 17px; }
+.badge {
+  display: inline-block; background: var(--bg2); border: 1px solid var(--line);
+  border-radius: 999px; padding: 2px 12px; font-size: 12px; color: var(--sub);
+}
+.pager { display: flex; gap: 18px; margin-top: 40px; }
+
+/* 文章列表 */
+.postlist { list-style: none; padding: 0; }
+.postlist li { border-bottom: 1px solid var(--line); }
+.postlist a { display: block; padding: 18px 0; color: var(--ink); }
+.postlist a:hover { text-decoration: none; }
+.postlist a:hover strong { color: var(--brand-deep); }
+.postlist .d { display: block; font-size: 12px; color: var(--sub); }
+.postlist strong { display: block; font-size: 18px; margin: 4px 0; }
+.postlist .s { color: var(--sub); font-size: 15px; }
+
+footer {
+  border-top: 1px solid var(--line); padding: 32px 0 48px;
+  color: var(--sub); font-size: 14px;
+}
+footer a { color: var(--sub); }
+
+@media (max-width: 640px) {
+  section { padding: 52px 0; }
+  nav .hide-sm { display: none; }
+}

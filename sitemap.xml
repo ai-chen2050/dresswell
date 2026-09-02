@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://example.com/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/index.html"/>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://example.com/index.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/index.html"/>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://example.com/geo.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/geo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/geo.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/geo.html"/>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://example.com/geo.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/geo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/geo.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/geo.html"/>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://example.com/devlog.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/devlog.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/devlog.html"/>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://example.com/support.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/support.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/support.html"/>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://example.com/privacy.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://example.com/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/privacy.html"/>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset>

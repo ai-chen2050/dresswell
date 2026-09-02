@@ -1,0 +1,55 @@
+name: Deploy to GitHub Pages
+
+# 推到默认分支就发布。站点是纯静态的，不需要构建步骤 ——
+# HTML 由本地 `make build` 生成并提交，CI 只负责发布。
+#
+# 首次启用：仓库 Settings → Pages → Source 选 "GitHub Actions"。
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      # 生成物是提交进仓库的；这里重跑一遍确认它们与 site.config.json 一致，
+      # 防止"改了配置忘了 make geo"就推上线。
+      - name: 生成物是否最新
+        run: |
+          python3 tools/build_devlog.py
+          python3 tools/gen_geo.py
+          if ! git diff --quiet; then
+            echo "::error::生成物与 site.config.json 不一致 —— 本地跑 make build 后重新提交"
+            git --no-pager diff --stat
+            exit 1
+          fi
+      - name: GEO 体检
+        run: python3 tools/geo_check.py
+
+  deploy:
+    needs: check
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: "." }
+      - id: deployment
+        uses: actions/deploy-pages@v4
