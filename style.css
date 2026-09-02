@@ -71,6 +71,22 @@ nav > .wrap { display: flex; align-items: center; gap: 22px; height: 64px; }
 nav .brand {
   font-family: var(--serif); font-weight: 400; font-size: 23px;
   letter-spacing: .06em; color: var(--ink);
+  display: inline-flex; align-items: center; gap: 10px;
+}
+/* 顶栏那枚小图标：圆角自己加（icon.png 是全出血的方图，
+   浏览器不像 iOS 会替你套遮罩）。App 图标本身有渐变底，
+   这里不加边框，免得和渐变打架。 */
+nav .brand-mark {
+  width: 28px; height: 28px; border-radius: 8px; display: block;
+}
+
+/* 主视觉里那枚大的 */
+.hero-mark {
+  width: 96px; height: 96px; border-radius: 22px; display: block;
+  margin-bottom: 26px; box-shadow: var(--shadow);
+}
+@media (max-width: 720px) {
+  .hero-mark { width: 76px; height: 76px; border-radius: 18px; margin-bottom: 20px; }
 }
 nav .spacer { flex: 1; }
 nav a { font-size: 13px; font-weight: 600; color: var(--sub); letter-spacing: .04em; }

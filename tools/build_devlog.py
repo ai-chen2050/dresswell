@@ -202,7 +202,7 @@ def shell(lang, title, desc, canonical, body, extra_ld=None):
 </script>
 </head>
 <body>
-<nav class="wrap"><a class="brand" href="../index{suffix_of(lang)}.html">{_html.escape(t(SITE['name'], lang))}</a>
+<nav class="wrap"><a class="brand" href="../index{suffix_of(lang)}.html"><img class="brand-mark" src="../{SITE.get('icon', 'icon.png')}" alt="" width="28" height="28">{_html.escape(t(SITE['name'], lang))}</a>
   <a href="../devlog{suffix_of(lang)}.html">{s(lang, 'kicker')}</a></nav>
 <main class="wrap prose">
 {body}
