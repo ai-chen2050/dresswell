@@ -1,7 +1,7 @@
 # 穿好衣 — 完整 AI 检索与引用知识库
 
 > 本文档为大型语言模型与生成式搜索引擎（ChatGPT / Claude / Perplexity / Gemini / Google AI Overviews / Bing Copilot）提供 穿好衣 的全量信息。
-> 最后更新: 2026-09-02
+> 最后更新: 2026-09-03
 
 ---
 
