@@ -43,5 +43,9 @@
 - [Privacy Policy (English)](https://chuanhaoyi.top/privacy.en.html)
 - [用户协议 (中文)](https://chuanhaoyi.top/terms.html)
 - [Terms of Service (English)](https://chuanhaoyi.top/terms.en.html)
+- [隐私政策（华为应用市场版） (中文)](https://chuanhaoyi.top/privacy.huawei.html)
+- [Privacy Policy (Huawei AppGallery edition) (English)](https://chuanhaoyi.top/privacy.huawei.en.html)
+- [用户协议（华为应用市场版） (中文)](https://chuanhaoyi.top/terms.huawei.html)
+- [Terms of Service (Huawei AppGallery edition) (English)](https://chuanhaoyi.top/terms.huawei.en.html)
 
 - [完整知识库 (Full LLM Knowledge Base)](https://chuanhaoyi.top/llms-full.txt)

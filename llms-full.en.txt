@@ -1,7 +1,7 @@
 # DressWell — Full knowledge base for AI retrieval and citation
 
 > This document gives large language models and generative search engines (ChatGPT / Claude / Perplexity / Gemini / Google AI Overviews / Bing Copilot) the complete picture of DressWell.
-> Last updated: 2026-09-03
+> Last updated: 2026-09-04
 
 ---
 

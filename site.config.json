@@ -132,6 +132,32 @@
         "zh-CN": "穿好衣用户协议：许可范围、一次性买断与技能包的付费说明、自带 API Key 的责任划分、免责声明与适用法律。",
         "en": "DressWell terms of service: licence scope, one-time purchase and skill packs, responsibilities when you bring your own API key, disclaimers and governing law."
       }
+    },
+    {
+      "file": "privacy.huawei",
+      "title": {
+        "zh-CN": "隐私政策（华为应用市场版）",
+        "en": "Privacy Policy (Huawei AppGallery edition)"
+      },
+      "priority": 0.3,
+      "changefreq": "yearly",
+      "description": {
+        "zh-CN": "穿好衣华为应用市场版隐私政策：不收集任何个人数据，无账号无服务器；该版本没有任何联网分析功能，没有任何数据会离开你的设备。",
+        "en": "DressWell privacy policy for the Huawei AppGallery edition: no personal data collected, no account, no servers; this edition has no cloud-connected analysis features and no data ever leaves the device."
+      }
+    },
+    {
+      "file": "terms.huawei",
+      "title": {
+        "zh-CN": "用户协议（华为应用市场版）",
+        "en": "Terms of Service (Huawei AppGallery edition)"
+      },
+      "priority": 0.3,
+      "changefreq": "yearly",
+      "description": {
+        "zh-CN": "穿好衣华为应用市场版用户协议：许可范围、Pro 一次性买断、免责声明与适用法律。该版本不含技能包。",
+        "en": "DressWell terms of service for the Huawei AppGallery edition: licence scope, the one-time Pro purchase, disclaimer and governing law. This edition has no skill packs."
+      }
     }
   ],
   "links": {
