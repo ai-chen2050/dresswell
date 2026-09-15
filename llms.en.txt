@@ -8,6 +8,8 @@
 - **Also known as**: 穿好衣, ai-dress
 - **Positioning**: A 3D fitting room that lives on your phone
 - **Platforms**: iOS / Android
+- **App Store**: https://apps.apple.com/app/id6808203178
+- **Huawei AppGallery**: https://appgallery.huawei.com/app/C118867357
 
 ## Core Features
 

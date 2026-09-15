@@ -1,7 +1,7 @@
 # 穿好衣 — 完整 AI 检索与引用知识库
 
 > 本文档为大型语言模型与生成式搜索引擎（ChatGPT / Claude / Perplexity / Gemini / Google AI Overviews / Bing Copilot）提供 穿好衣 的全量信息。
-> 最后更新: 2026-09-04
+> 最后更新: 2026-09-15
 
 ---
 
@@ -12,6 +12,8 @@
 - **完整描述**: 穿好衣把你的身材和你真实的衣服重建成可以转着看的 3D：捏出自己的身形与五官，拍一张衣服照片就能穿到身上，外套、上衣、裙子自由叠穿。重建、渲染、换装全部在手机本地完成，衣柜和身材数据不上传。
 - **支持平台**: iOS / Android
 - **开发者**: chuanhaoyi
+- **App Store**: https://apps.apple.com/app/id6808203178
+- **华为应用市场**: https://appgallery.huawei.com/app/C118867357
 
 ---
 

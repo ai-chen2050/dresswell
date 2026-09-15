@@ -1,7 +1,7 @@
 # DressWell — Full knowledge base for AI retrieval and citation
 
 > This document gives large language models and generative search engines (ChatGPT / Claude / Perplexity / Gemini / Google AI Overviews / Bing Copilot) the complete picture of DressWell.
-> Last updated: 2026-09-04
+> Last updated: 2026-09-15
 
 ---
 
@@ -12,6 +12,8 @@
 - **Description**: DressWell rebuilds your body and your real clothes as 3D you can spin: shape your own figure and face, photograph a garment to wear it, and layer coats, tops and dresses freely. Reconstruction, rendering and styling all run on the phone — your wardrobe and body data never leave the device.
 - **Platforms**: iOS / Android
 - **Developer**: chuanhaoyi
+- **App Store**: https://apps.apple.com/app/id6808203178
+- **Huawei AppGallery**: https://appgallery.huawei.com/app/C118867357
 
 ---
 

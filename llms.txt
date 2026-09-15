@@ -8,6 +8,8 @@
 - **别名**: DressWell, ai-dress
 - **定位**: 住在你手机里的 3D 试衣间
 - **平台**: iOS / Android
+- **App Store**: https://apps.apple.com/app/id6808203178
+- **华为应用市场**: https://appgallery.huawei.com/app/C118867357
 
 ## 核心功能 (Core Features)
 
