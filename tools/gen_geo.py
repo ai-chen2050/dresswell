@@ -39,7 +39,30 @@ AI_AGENTS = [
     "Amazonbot", "Bytespider", "YouBot", "cohere-ai", "Meta-ExternalAgent",
 ]
 
-TODAY = date.today().isoformat()
+def get_today() -> str:
+    if os.environ.get("GEO_DATE"):
+        return os.environ["GEO_DATE"]
+    try:
+        with open(CONF_PATH, encoding="utf-8") as f:
+            u = json.load(f).get("site", {}).get("updated")
+            if u:
+                return u
+    except Exception:
+        pass
+    if os.environ.get("CI") or os.environ.get("GITHUB_ACTIONS"):
+        sitemap_path = os.path.join(ROOT, "sitemap.xml")
+        if os.path.exists(sitemap_path):
+            try:
+                with open(sitemap_path, encoding="utf-8") as f:
+                    m = re.search(r"<lastmod>(\d{4}-\d{2}-\d{2})</lastmod>", f.read())
+                if m:
+                    return m.group(1)
+            except Exception:
+                pass
+    return date.today().isoformat()
+
+
+TODAY = get_today()
 
 
 def load_conf() -> dict:
@@ -378,6 +401,81 @@ def build_jsonld(conf, page_file, code):
                       ensure_ascii=False, indent=2)
 
 
+def build_ga4(conf):
+    """生成 Google Analytics 4 (gtag.js) + 百度统计 (hm.js) + SPA 路由切换追踪脚本。"""
+    s = conf.get("site", {})
+    ga4_id = (s.get("ga4") or s.get("ga") or "").strip()
+    ba_id = (s.get("baidu") or s.get("ba") or "").strip()
+    if not ga4_id and not ba_id:
+        return ""
+    lines = []
+    if ga4_id:
+        lines += [
+            f'<script async src="https://www.googletagmanager.com/gtag/js?id={ga4_id}"></script>',
+            '<script>',
+            '  window.dataLayer = window.dataLayer || [];',
+            '  function gtag(){dataLayer.push(arguments);}',
+            "  gtag('js', new Date());",
+            f"  gtag('config', '{ga4_id}');",
+            '</script>',
+        ]
+    if ba_id:
+        lines += [
+            '<script>',
+            '  window._hmt = window._hmt || [];',
+            '  (function() {',
+            '    var hm = document.createElement("script");',
+            f'    hm.src = "https://hm.baidu.com/hm.js?{ba_id}";',
+            '    hm.async = true;',
+            '    var s = document.getElementsByTagName("script")[0];',
+            '    if (s && s.parentNode) s.parentNode.insertBefore(hm, s);',
+            '    else document.head.appendChild(hm);',
+            '  })();',
+            '</script>',
+        ]
+    lines += [
+        '<script>',
+        '  (function(){',
+        '    var lastPath = location.pathname + location.search + location.hash;',
+        '    function trackPageView(){',
+        '      var curPath = location.pathname + location.search + location.hash;',
+        '      if (curPath === lastPath) return;',
+        '      lastPath = curPath;',
+        '      if (typeof window.gtag === "function") {',
+        "        window.gtag('event', 'page_view', {",
+        '          page_path: curPath,',
+        '          page_location: location.href,',
+        '          page_title: document.title',
+        '        });',
+        '      }',
+        '      if (Array.isArray(window._hmt)) {',
+        "        window._hmt.push(['_trackPageview', curPath]);",
+        '      }',
+        '    }',
+        '    var origPush = history.pushState;',
+        '    if (origPush) {',
+        '      history.pushState = function(){',
+        '        var ret = origPush.apply(this, arguments);',
+        '        trackPageView();',
+        '        return ret;',
+        '      };',
+        '    }',
+        '    var origReplace = history.replaceState;',
+        '    if (origReplace) {',
+        '      history.replaceState = function(){',
+        '        var ret = origReplace.apply(this, arguments);',
+        '        trackPageView();',
+        '        return ret;',
+        '      };',
+        '    }',
+        "    window.addEventListener('popstate', trackPageView);",
+        "    window.addEventListener('hashchange', trackPageView);",
+        '  })();',
+        '</script>',
+    ]
+    return "\n".join(lines)
+
+
 def build_head(conf, page, code):
     s = conf["site"]
     dom = s["domain"].rstrip("/")
@@ -418,6 +516,9 @@ def build_head(conf, page, code):
         build_jsonld(conf, page["file"], code),
         '</script>',
     ]
+    ga4_block = build_ga4(conf)
+    if ga4_block:
+        out.append(ga4_block)
     return "\n".join(out)
 
 

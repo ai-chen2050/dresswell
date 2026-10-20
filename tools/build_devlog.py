@@ -171,6 +171,79 @@ def parse(path):
 
 
 # ── 页面模板 ────────────────────────────────────────────────────────
+def build_ga4():
+    ga4_id = (SITE.get("ga4") or SITE.get("ga") or "").strip()
+    ba_id = (SITE.get("baidu") or SITE.get("ba") or "").strip()
+    if not ga4_id and not ba_id:
+        return ""
+    lines = [""]
+    if ga4_id:
+        lines += [
+            f'<script async src="https://www.googletagmanager.com/gtag/js?id={ga4_id}"></script>',
+            '<script>',
+            '  window.dataLayer = window.dataLayer || [];',
+            '  function gtag(){dataLayer.push(arguments);}',
+            "  gtag('js', new Date());",
+            f"  gtag('config', '{ga4_id}');",
+            '</script>',
+        ]
+    if ba_id:
+        lines += [
+            '<script>',
+            '  window._hmt = window._hmt || [];',
+            '  (function() {',
+            '    var hm = document.createElement("script");',
+            f'    hm.src = "https://hm.baidu.com/hm.js?{ba_id}";',
+            '    hm.async = true;',
+            '    var s = document.getElementsByTagName("script")[0];',
+            '    if (s && s.parentNode) s.parentNode.insertBefore(hm, s);',
+            '    else document.head.appendChild(hm);',
+            '  })();',
+            '</script>',
+        ]
+    lines += [
+        '<script>',
+        '  (function(){',
+        '    var lastPath = location.pathname + location.search + location.hash;',
+        '    function trackPageView(){',
+        '      var curPath = location.pathname + location.search + location.hash;',
+        '      if (curPath === lastPath) return;',
+        '      lastPath = curPath;',
+        '      if (typeof window.gtag === "function") {',
+        "        window.gtag('event', 'page_view', {",
+        '          page_path: curPath,',
+        '          page_location: location.href,',
+        '          page_title: document.title',
+        '        });',
+        '      }',
+        '      if (Array.isArray(window._hmt)) {',
+        "        window._hmt.push(['_trackPageview', curPath]);",
+        '      }',
+        '    }',
+        '    var origPush = history.pushState;',
+        '    if (origPush) {',
+        '      history.pushState = function(){',
+        '        var ret = origPush.apply(this, arguments);',
+        '        trackPageView();',
+        '        return ret;',
+        '      };',
+        '    }',
+        '    var origReplace = history.replaceState;',
+        '    if (origReplace) {',
+        '      history.replaceState = function(){',
+        '        var ret = origReplace.apply(this, arguments);',
+        '        trackPageView();',
+        '        return ret;',
+        '      };',
+        '    }',
+        "    window.addEventListener('popstate', trackPageView);",
+        "    window.addEventListener('hashchange', trackPageView);",
+        '  })();',
+        '</script>',
+    ]
+    return "\n".join(lines)
+
+
 def shell(lang, title, desc, canonical, body, extra_ld=None):
     ld = {
         "@context": "https://schema.org",
@@ -199,7 +272,7 @@ def shell(lang, title, desc, canonical, body, extra_ld=None):
 <link rel="stylesheet" href="../style.css">
 <script type="application/ld+json">
 {json.dumps(ld, ensure_ascii=False, indent=2)}
-</script>
+</script>{build_ga4()}
 </head>
 <body>
 <nav class="wrap"><a class="brand" href="../index{suffix_of(lang)}.html"><img class="brand-mark" src="../{SITE.get('icon', 'icon.png')}" alt="" width="28" height="28">{_html.escape(t(SITE['name'], lang))}</a>
@@ -222,6 +295,11 @@ def build():
         return
 
     os.makedirs(OUT, exist_ok=True)
+    expected_slugs = {p["slug"] for p in posts}
+    for old_fn in sorted(os.listdir(OUT)):
+        if old_fn.endswith(".html") and old_fn[:-5] not in expected_slugs:
+            os.remove(os.path.join(OUT, old_fn))
+            print(f"  🗑 移除已删源码的残留生成物 devlog/{old_fn}")
     by_lang = {}
     for p in posts:
         by_lang.setdefault(p["lang"], []).append(p)

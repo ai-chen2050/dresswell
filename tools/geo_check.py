@@ -29,7 +29,11 @@ def warn(m): warns.append(m)
 
 
 def html_files():
-    return sorted(f for f in os.listdir(ROOT) if f.endswith(".html"))
+    files = sorted(f for f in os.listdir(ROOT) if f.endswith(".html"))
+    devlog_dir = os.path.join(ROOT, "devlog")
+    if os.path.isdir(devlog_dir):
+        files += sorted(f"devlog/{f}" for f in os.listdir(devlog_dir) if f.endswith(".html"))
+    return files
 
 
 def read(p):
@@ -74,6 +78,17 @@ def check_config():
     for f in conf.get("features", []):
         if f.get("name") and any_blank(f.get("detail")) and any_blank(f.get("summary")):
             warn(f"功能「{vals(f['name'])[0]}」没有描述，llms-full.txt 里会是空条目")
+    ga4 = (s.get("ga4") or s.get("ga") or "").strip()
+    if not ga4:
+        warn("site.ga4 未配置 —— 挂在 GitHub Pages 子路径（如 xxx.github.io/app/）时，"
+             "主站 GA 不会自动继承到子项目仓库，子页面将没有任何访问统计")
+    elif not re.match(r"^G-[A-Z0-9]{6,14}$", ga4):
+        err(f"site.ga4 格式不正确（{ga4}），应为 G-XXXXXXXXXX")
+    baidu = (s.get("baidu") or s.get("ba") or "").strip()
+    if not baidu:
+        warn("site.baidu 未配置 —— 建议与主站共用相同的百度统计 ID")
+    elif not re.match(r"^[0-9a-fA-F]{32}$", baidu):
+        err(f"site.baidu 格式不正确（{baidu}），应为 32 位十六进制字符串")
     return conf
 
 
@@ -118,6 +133,16 @@ def check_pages(conf):
 
         if "GEO:AUTO START" not in h and not fn.startswith("devlog"):
             warn(f"{fn}: 没有 GEO:AUTO 标记，gen_geo.py 不会维护它的 head")
+
+        s_conf = conf.get("site", {}) if conf else {}
+        ga4 = (s_conf.get("ga4") or s_conf.get("ga") or "").strip()
+        baidu = (s_conf.get("baidu") or s_conf.get("ba") or "").strip()
+        if ga4 and f"googletagmanager.com/gtag/js?id={ga4}" not in h:
+            err(f"{fn}: 缺 GA4 测量代码 ({ga4}) —— 跑 make build 注入全站页面")
+        if baidu and f"hm.baidu.com/hm.js?{baidu}" not in h:
+            err(f"{fn}: 缺百度统计代码 ({baidu}) —— 跑 make build 注入全站页面")
+        if (ga4 or baidu) and "trackPageView" not in h:
+            warn(f"{fn}: 有统计代码但缺 SPA 路由切换 page_view / _trackPageview 追踪代码")
 
     for txt, files in titles.items():
         if len(files) > 1:

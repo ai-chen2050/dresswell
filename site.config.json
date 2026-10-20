@@ -35,7 +35,9 @@
     },
     "icon": "icon.png",
     "ogImage": "og.png",
-    "themeColor": "#2EBD85"
+    "themeColor": "#2EBD85",
+    "ga4": "G-1CQNQNPK1Y",
+    "baidu": "b3a7b6fedcba22d39897693d6f716035"
   },
   "locales": {
     "//": "第一个是默认语言（对应 index.html，无后缀）；其余生成 index.<code>.html",

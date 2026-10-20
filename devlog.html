@@ -26,6 +26,62 @@
   }
 }
 </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1CQNQNPK1Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-1CQNQNPK1Y');
+</script>
+<script>
+  window._hmt = window._hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?b3a7b6fedcba22d39897693d6f716035";
+    hm.async = true;
+    var s = document.getElementsByTagName("script")[0];
+    if (s && s.parentNode) s.parentNode.insertBefore(hm, s);
+    else document.head.appendChild(hm);
+  })();
+</script>
+<script>
+  (function(){
+    var lastPath = location.pathname + location.search + location.hash;
+    function trackPageView(){
+      var curPath = location.pathname + location.search + location.hash;
+      if (curPath === lastPath) return;
+      lastPath = curPath;
+      if (typeof window.gtag === "function") {
+        window.gtag('event', 'page_view', {
+          page_path: curPath,
+          page_location: location.href,
+          page_title: document.title
+        });
+      }
+      if (Array.isArray(window._hmt)) {
+        window._hmt.push(['_trackPageview', curPath]);
+      }
+    }
+    var origPush = history.pushState;
+    if (origPush) {
+      history.pushState = function(){
+        var ret = origPush.apply(this, arguments);
+        trackPageView();
+        return ret;
+      };
+    }
+    var origReplace = history.replaceState;
+    if (origReplace) {
+      history.replaceState = function(){
+        var ret = origReplace.apply(this, arguments);
+        trackPageView();
+        return ret;
+      };
+    }
+    window.addEventListener('popstate', trackPageView);
+    window.addEventListener('hashchange', trackPageView);
+  })();
+</script>
 </head>
 <body>
 <nav class="wrap"><a class="brand" href="index.html"><img class="brand-mark" src="icon.png" alt="" width="28" height="28">穿好衣</a>
