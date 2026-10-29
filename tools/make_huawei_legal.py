@@ -21,6 +21,8 @@ PAIRS = [
     ('privacy.en.html', 'privacy.huawei.en.html'),
     ('terms.html', 'terms.huawei.html'),
     ('terms.en.html', 'terms.huawei.en.html'),
+    ('subscription.html', 'subscription.huawei.html'),
+    ('subscription.en.html', 'subscription.huawei.en.html'),
 ]
 NOTE = {
     # ⚠️ 这句话里也别出现 "AI" 两个字母 —— 华为审核是关键词式的，连"不含 AI"都可能被挑。
@@ -32,8 +34,8 @@ NOTE = {
 
 
 def strip_ai(s):
-    s, n = re.subn(r'\s*<!-- AI-ONLY -->.*?<!-- /AI-ONLY -->', '', s, flags=re.S)
-    assert n >= 1, '基础页里没有 AI-ONLY 标记'
+    if '<!-- AI-ONLY -->' in s:
+        s, _ = re.subn(r'\s*<!-- AI-ONLY -->.*?<!-- /AI-ONLY -->', '', s, flags=re.S)
     return s
 
 
@@ -46,8 +48,8 @@ def renumber(s):
 
 
 def relink(s, en):
-    # 页内互链也指到华为版（隐私 ↔ 条款）
-    for a, b in (('privacy', 'privacy.huawei'), ('terms', 'terms.huawei')):
+    # 页内互链也指到华为版（隐私 ↔ 条款 ↔ 订阅）
+    for a, b in (('privacy', 'privacy.huawei'), ('terms', 'terms.huawei'), ('subscription', 'subscription.huawei')):
         s = s.replace(f'href="{a}{".en" if en else ""}.html"', f'href="{b}{".en" if en else ""}.html"')
     return s
 

@@ -6,6 +6,11 @@
 
 ## 2026-10-29
 
+- **新增会员与自动续费服务协议及解除自动续费流程（华为合规与多渠道支持）**：
+  - 新增 `subscription.html`、`subscription.en.html`、`subscription.huawei.html`、`subscription.huawei.en.html`，明确界定会员特权、自动续费扣款规则（周期、扣费时间、到期前 24 小时扣款），并详述华为手机系统设置与应用市场中的退订/解除自动续费操作路径及 iOS/Google Play 退订指引；
+  - `terms.html` 与 `terms.huawei.html`（含中英文）：更新第 3 节付费条款，加入连续包月/包年订阅的自动续费扣款说明及取消续订指引，并建立直链互通；
+  - `tools/make_huawei_legal.py` & `site.config.json`：注册 `subscription` 与 `subscription.huawei` 路由规则并自动生成无 AI 华为渠道合规政策页。
+
 - **上线中英双语 88 秒产品功能全景宣发视频与智能时间戳剧场**：
   - `promo.mp4`, `cover.png`, `promo-en.mp4`, `cover-en.png`: 引入 1080P 60fps 高清宣发片及视频海报（含新添 3D 百变站姿展示、双人折叠秀场、希腊女神裙拍照上身等 8 大核心功能场景）。
   - `style.css`: 新增 Mac 窗口剧场样式 `.video-stage`、三色视窗圆点 `.pg-dots`、胶囊章节按钮 `.chapter-pill` 及响应式断点适配。

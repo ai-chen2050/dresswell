@@ -135,4 +135,40 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://chuanhaoyi.top/subscription.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/subscription.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/subscription.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/subscription.html"/>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://chuanhaoyi.top/subscription.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/subscription.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/subscription.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/subscription.html"/>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://chuanhaoyi.top/subscription.huawei.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/subscription.huawei.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/subscription.huawei.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/subscription.huawei.html"/>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://chuanhaoyi.top/subscription.huawei.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/subscription.huawei.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/subscription.huawei.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/subscription.huawei.html"/>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
 </urlset>

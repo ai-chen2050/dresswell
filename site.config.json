@@ -160,6 +160,32 @@
         "zh-CN": "穿好衣华为应用市场版用户协议：许可范围、Pro 一次性买断、免责声明与适用法律。该版本不含技能包。",
         "en": "DressWell terms of service for the Huawei AppGallery edition: licence scope, the one-time Pro purchase, disclaimer and governing law. This edition has no skill packs."
       }
+    },
+    {
+      "file": "subscription",
+      "title": {
+        "zh-CN": "会员与自动续费服务协议",
+        "en": "Membership & Auto-Renewal Agreement"
+      },
+      "priority": 0.4,
+      "changefreq": "monthly",
+      "description": {
+        "zh-CN": "穿好衣会员与自动续费服务协议：会员权益内容、自动续费规则、扣款周期与解除/取消自动续费流程。",
+        "en": "DressWell Membership & Auto-Renewal Service Agreement: benefits, recurring billing terms, renewal cycle, and step-by-step cancellation instructions."
+      }
+    },
+    {
+      "file": "subscription.huawei",
+      "title": {
+        "zh-CN": "会员与自动续费服务协议（华为应用市场版）",
+        "en": "Membership & Auto-Renewal Agreement (Huawei edition)"
+      },
+      "priority": 0.3,
+      "changefreq": "monthly",
+      "description": {
+        "zh-CN": "穿好衣会员与自动续费服务协议（华为应用市场版）：会员权益说明、连续包月/包年扣费规则与华为手机解除自动续费操作流程。",
+        "en": "DressWell Membership & Auto-Renewal Service Agreement (Huawei AppGallery edition): benefits, recurring billing rules, and cancellation instructions on Huawei devices."
+      }
     }
   ],
   "links": {
