@@ -229,6 +229,7 @@
         <p>
           <a class="cta" href="https://apps.apple.com/app/id6808203178" target="_blank" rel="noopener">App Store 下载</a>
           <a class="cta ghost" href="https://appgallery.huawei.com/app/C118867357" target="_blank" rel="noopener">华为应用市场</a>
+          <a class="cta ghost" href="#video">▶ 88秒宣传片</a>
           <a class="cta ghost" href="#features">看它怎么做到</a>
         </p>
         <p class="meta">
@@ -238,6 +239,45 @@
         </p>
       </div>
     </header>
+
+    <section id="video" class="video-sec">
+      <div class="wrap">
+        <div class="video-stage">
+          <div class="video-bar">
+            <div class="pg-dots"><span></span><span></span><span></span></div>
+            <span>穿好衣 · 88秒产品功能全景片 (1080P)</span>
+            <div class="video-badge-row">
+              <span class="video-pill-tag">3D 试衣间</span>
+              <span class="video-pill-tag">本地隐私</span>
+            </div>
+          </div>
+          <div class="video-frame">
+            <video
+              id="promo-video"
+              class="promo-video-player"
+              controls
+              playsinline
+              preload="metadata"
+              poster="cover.png"
+            >
+              <source src="promo.mp4" type="video/mp4" />
+              您的浏览器不支持 HTML5 视频播放，请升级浏览器。
+            </video>
+          </div>
+          <div class="video-chapters" id="video-chapters">
+            <button type="button" class="chapter-pill active" data-time="0"><time>00:00</time> 01 3D试衣间</button>
+            <button type="button" class="chapter-pill" data-time="10"><time>00:10</time> 02 百变站姿</button>
+            <button type="button" class="chapter-pill" data-time="20"><time>00:20</time> 03 折叠秀场</button>
+            <button type="button" class="chapter-pill" data-time="30"><time>00:30</time> 04 拍照上身</button>
+            <button type="button" class="chapter-pill" data-time="40"><time>00:40</time> 05 真实身材</button>
+            <button type="button" class="chapter-pill" data-time="50"><time>00:50</time> 06 穿搭海报</button>
+            <button type="button" class="chapter-pill" data-time="60"><time>01:00</time> 07 AI搭配师</button>
+            <button type="button" class="chapter-pill" data-time="70"><time>01:10</time> 08 本地隐私</button>
+            <button type="button" class="chapter-pill" data-time="80"><time>01:20</time> 品牌终章</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section>
       <div class="wrap">
@@ -512,6 +552,39 @@
             localStorage.setItem("theme", next);
           } catch (err) {}
         });
+    </script>
+    <script>
+      (function () {
+        var video = document.getElementById("promo-video");
+        var chapters = document.querySelectorAll("#video-chapters .chapter-pill");
+        if (!video || !chapters.length) return;
+
+        chapters.forEach(function (pill) {
+          pill.addEventListener("click", function () {
+            var time = parseFloat(pill.getAttribute("data-time") || "0");
+            video.currentTime = time;
+            video.play();
+            chapters.forEach(function (p) { p.classList.remove("active"); });
+            pill.classList.add("active");
+          });
+        });
+
+        video.addEventListener("timeupdate", function () {
+          var ct = video.currentTime;
+          var curIndex = 0;
+          var times = [0, 10, 20, 30, 40, 50, 60, 70, 80];
+          for (var i = times.length - 1; i >= 0; i--) {
+            if (ct >= times[i] - 0.25) {
+              curIndex = i;
+              break;
+            }
+          }
+          chapters.forEach(function (p, idx) {
+            if (idx === curIndex) p.classList.add("active");
+            else p.classList.remove("active");
+          });
+        });
+      })();
     </script>
   </body>
 </html>
