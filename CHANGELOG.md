@@ -4,6 +4,13 @@
 > 这份文件是解释"某个数字为什么长这样"的第一去处，CLAUDE.md 会指向它。
 > 用 `/devlog` 让 Claude 自动追加。
 
+## 2026-11-18
+
+- **接入海内外双轨售后用户社群闭环 (`site.config.json`, `index.html`, `index.en.html`, `support.html`, `support.en.html`, `style.css`, `Makefile`, `tools/{qr_svg.py,setup_community.py,gen_geo.py,geo_check.py}`)**:
+  - 中文站展示开发者个人微信永久名片码（`wechat-qr.png`）与一键复制微信号 `ai-chen2050`（提示备注「穿好衣」入群），并受 `geo_check.py` 硬门禁保护杜绝混入境外 `t.me/` 死链；
+  - 英文站接入在 BK Labs 超级群通过官方 Bot API 自动创建的纯英文专属 Topic **`DressWell`**、永久邀请链接与圆角矢量 `telegram-qr.svg`，并为 Topic 绑定官方 3D 图标 `🛍` (`iconCustomEmojiId: 5350699789551935589`)；
+  - 将全站 `#community` 模块重设计为融合 Didot 衬线标题、`in oklab` 环境光晕、点阵肌理与右侧 Scan Pass 取景框的高质感 Bento 社群展示舱，采用 `container-type: inline-size` 适配宽窄容器并升级微信复制交互为不禁用按钮的无障碍状态提示。
+
 ## 2026-10-29
 
 - **新增会员与自动续费服务协议及解除自动续费流程（华为合规与多渠道支持）**：

@@ -37,7 +37,8 @@
     "ogImage": "og.png",
     "themeColor": "#2EBD85",
     "ga4": "G-1CQNQNPK1Y",
-    "baidu": "b3a7b6fedcba22d39897693d6f716035"
+    "baidu": "b3a7b6fedcba22d39897693d6f716035",
+    "updated": "2026-11-18"
   },
   "locales": {
     "//": "第一个是默认语言（对应 index.html，无后缀）；其余生成 index.<code>.html",
@@ -197,6 +198,24 @@
     "web": "",
     "github": "",
     "contact": "mailto:blake.chen94@gmail.com"
+  },
+  "community": {
+    "//": "售后与用户社群（中文展示个人微信名片，英文展示 Telegram 专属 Topic 与二维码）",
+    "wechat": {
+      "id": "ai-chen2050",
+      "qrImage": "wechat-qr.png",
+      "remark": "穿好衣"
+    },
+    "telegram": {
+      "inviteUrl": "https://t.me/+aewyAQY7BHU5MzA1",
+      "topicId": 12,
+      "topicTitle": "DressWell",
+      "topicEmoji": "🛍",
+      "iconCustomEmojiId": "5350699789551935589",
+      "topicUrl": "",
+      "groupName": "DressWell Community",
+      "qrImage": "telegram-qr.svg"
+    }
   },
   "features": [
     {

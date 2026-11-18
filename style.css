@@ -7,6 +7,7 @@
    宋体一族在中文系统上就有，落到 Georgia 也仍然是衬线，不会崩成无衬线。 */
 
 :root {
+  --in-oklab: ;
   /* 底色偏暖的象牙白，不是纯白 —— 纸感 */
   --bg: #fbf8f4;
   --bg2: #f4efe8;
@@ -27,6 +28,12 @@
            "Songti SC", "Source Han Serif SC", "Noto Serif CJK SC", serif;
   --sans: -apple-system, BlinkMacSystemFont, "Optima", "PingFang SC",
           "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+}
+
+@supports (background: linear-gradient(in oklab, white, black)) {
+  :root {
+    --in-oklab: in oklab;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -371,4 +378,178 @@ footer .fine { font-size: 12.5px; opacity: .8; max-width: 70ch; }
   .video-bar span:nth-child(2) { display: none; }
   .video-chapters { gap: 6px; padding: 10px 12px; }
   .chapter-pill { padding: 4px 8px; font-size: 11.5px; }
+}
+
+/* 售后与用户社群 · Editorial Bento 展示舱 */
+.community-sec { padding: 64px 0 48px; border-top: 1px solid var(--line); }
+.community-sec-head { text-align: center; max-width: 640px; margin: 0 auto 24px; }
+.community-sec-head h2 { font-family: var(--serif); font-size: clamp(26px, 3.4vw, 34px); font-weight: 400; margin: 8px 0 6px; color: var(--ink); }
+.community-sec-head p { font-size: 14.5px; color: var(--sub); }
+.community-card {
+  position: relative; overflow: hidden; isolation: isolate;
+  container-type: inline-size;
+  background:
+    radial-gradient(62% 110% at 94% 8%, color-mix(in oklab, var(--brand) 14%, transparent), transparent 64%),
+    radial-gradient(48% 90% at 4% 96%, color-mix(in oklab, var(--accent) 12%, transparent), transparent 62%),
+    linear-gradient(145deg var(--in-oklab), var(--card) 0%, color-mix(in oklab, var(--bg2) 62%, var(--card)) 100%);
+  border: 1px solid color-mix(in oklab, var(--brand) 22%, var(--line));
+  border-radius: 22px; padding: 34px 36px; margin: 18px 0 28px;
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, #ffffff 65%, transparent),
+    0 20px 52px -16px color-mix(in oklab, var(--ink) 12%, transparent),
+    0 10px 28px -12px color-mix(in oklab, var(--brand) 14%, transparent);
+}
+.community-card::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: radial-gradient(color-mix(in oklab, var(--brand) 22%, transparent) 1px, transparent 1px);
+  background-size: 18px 18px;
+  mask-image: radial-gradient(ellipse 68% 92% at 88% 50%, #000 10%, transparent 82%);
+  -webkit-mask-image: radial-gradient(ellipse 68% 92% at 88% 50%, #000 10%, transparent 82%);
+}
+.community-inner {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: minmax(0, 1.35fr) auto;
+  align-items: center; gap: 36px;
+}
+.community-main { min-width: 0; }
+.community-head h3 {
+  font-family: var(--serif); font-size: clamp(22px, 2.6vw, 28px); font-weight: 400;
+  letter-spacing: .01em; color: var(--ink); margin: 0 0 10px; line-height: 1.28;
+}
+.community-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 12px; border-radius: 999px;
+  background: color-mix(in oklab, var(--brand) 11%, var(--card));
+  color: var(--brand-deep);
+  border: 1px solid color-mix(in oklab, var(--brand) 26%, var(--line));
+  font-size: 12px; font-weight: 700; letter-spacing: .03em; margin-bottom: 14px;
+}
+.community-badge .ic { flex-shrink: 0; }
+.community-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+  background: var(--brand);
+  box-shadow: 0 0 0 0 color-mix(in oklab, var(--brand) 55%, transparent);
+  animation: communityPulse 2.4s ease-out infinite;
+}
+@keyframes communityPulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--brand) 55%, transparent); }
+  70% { box-shadow: 0 0 0 7px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.community-copy p { font-size: 14.5px; color: var(--sub); line-height: 1.75; margin: 0 0 16px; max-width: 56ch; }
+.community-perks {
+  display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 22px;
+}
+.community-perks li {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 999px;
+  background: color-mix(in oklab, var(--bg2) 72%, var(--card));
+  border: 1px solid var(--line);
+  font-size: 12.5px; font-weight: 600; color: var(--ink);
+}
+.community-perks .ic { color: var(--brand-deep); flex-shrink: 0; }
+.community-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.community-wx-dock {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 13px; border-radius: 12px;
+  background: color-mix(in oklab, var(--bg2) 80%, var(--card));
+  border: 1px solid var(--line); color: var(--brand-deep);
+}
+.community-wx-id {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13.5px; font-weight: 800; color: var(--ink); background: none; border: 0; padding: 0;
+}
+.community-wx-remark {
+  font-size: 12px; font-weight: 700; color: var(--sub);
+  padding-left: 8px; border-left: 1px solid var(--line);
+}
+.community-copy-wrap { position: relative; display: inline-flex; align-items: center; }
+.community-copy-tip {
+  position: absolute; left: 50%; bottom: calc(100% + 9px);
+  transform: translateX(-50%) translateY(4px);
+  padding: 0; border-radius: 9px;
+  background: transparent; color: transparent;
+  font-size: 12px; font-weight: 700; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .18s ease, transform .18s ease;
+}
+.community-btn[data-copied] + .community-copy-tip,
+.community-btn[data-failed] + .community-copy-tip {
+  padding: 6px 11px; background: var(--ink); color: var(--bg);
+  box-shadow: 0 10px 24px color-mix(in oklab, var(--ink) 22%, transparent);
+  opacity: 1; transform: translateX(-50%) translateY(0);
+}
+.community-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-inline-size: 24px; min-block-size: 40px;
+  padding: 10px 18px; border-radius: 12px; cursor: pointer;
+  font-family: var(--sans); font-size: 13.5px; font-weight: 700; line-height: 1.2;
+  white-space: nowrap; flex-shrink: 0; text-decoration: none;
+  background: var(--ink); color: var(--bg); border: 1.5px solid var(--ink);
+  box-shadow: 0 10px 24px -8px color-mix(in oklab, var(--ink) 32%, transparent);
+  transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease;
+}
+.community-btn:hover { transform: translateY(-1px); opacity: .92; color: var(--bg); text-decoration: none; }
+.community-arr { transition: transform .18s ease; }
+.community-btn:hover .community-arr { transform: translateX(3px); }
+.community-btn .ic-check { display: none; }
+.community-btn[data-copied] .ic-copy { display: none; }
+.community-btn[data-copied] .ic-check { display: block; }
+.community-btn.secondary {
+  background: color-mix(in oklab, var(--bg2) 78%, var(--card));
+  color: var(--ink); border-color: var(--line); box-shadow: none;
+}
+.community-btn.secondary:hover { color: var(--brand-deep); border-color: color-mix(in oklab, var(--brand) 42%, var(--line)); }
+.community-pending { font-size: 13px; color: var(--sub); font-weight: 600; }
+.community-dock { display: flex; justify-content: center; }
+.community-pass {
+  width: 212px; padding: 15px 15px 13px; border-radius: 20px; text-align: center;
+  background: color-mix(in oklab, var(--card) 88%, var(--bg));
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1px solid color-mix(in oklab, var(--brand) 22%, var(--line));
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, #ffffff 70%, transparent),
+    0 18px 38px -12px color-mix(in oklab, var(--ink) 16%, transparent);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.community-card:hover .community-pass { transform: translateY(-3px); }
+.community-pass-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 10px; }
+.community-pass-kicker { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; font-weight: 800; letter-spacing: .09em; color: var(--sub); }
+.community-pass-tag { padding: 2px 7px; border-radius: 999px; background: color-mix(in oklab, var(--brand) 14%, transparent); color: var(--brand-deep); font-size: 10px; font-weight: 800; }
+.community-qr-frame {
+  position: relative; display: grid; place-items: center;
+  padding: 10px; border-radius: 16px; background: #ffffff;
+  border: 1px solid rgba(23, 20, 15, .08);
+  box-shadow: inset 0 0 0 1px rgba(23, 20, 15, .03), 0 8px 20px rgba(23, 20, 15, .06);
+}
+.qr-corner {
+  position: absolute; width: 12px; height: 12px; pointer-events: none;
+  border-color: color-mix(in oklab, var(--brand) 58%, transparent);
+  border-style: solid; border-width: 0; transition: border-color .2s ease;
+}
+.community-card:hover .qr-corner { border-color: var(--brand); }
+.qr-corner.tl { top: 5px; left: 5px; border-top-width: 2px; border-left-width: 2px; border-top-left-radius: 5px; }
+.qr-corner.tr { top: 5px; right: 5px; border-top-width: 2px; border-right-width: 2px; border-top-right-radius: 5px; }
+.qr-corner.bl { bottom: 5px; left: 5px; border-bottom-width: 2px; border-left-width: 2px; border-bottom-left-radius: 5px; }
+.qr-corner.br { bottom: 5px; right: 5px; border-bottom-width: 2px; border-right-width: 2px; border-bottom-right-radius: 5px; }
+.community-qr { display: block; width: 148px; height: 148px; border-radius: 8px; object-fit: contain; background: #ffffff; }
+.community-qr-placeholder {
+  width: 148px; height: 148px; border-radius: 10px;
+  border: 1.5px dashed color-mix(in oklab, var(--brand) 38%, var(--line));
+  background: var(--bg2); color: var(--sub);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 5px; text-align: center; padding: 12px; font-size: 12.5px; font-weight: 700;
+}
+.community-pass-sub { margin-top: 10px; font-size: 11.5px; font-weight: 600; color: var(--sub); line-height: 1.4; }
+@container (max-width: 620px) {
+  .community-inner { grid-template-columns: 1fr; gap: 22px; }
+  .community-main { text-align: center; }
+  .community-copy p { margin-inline: auto; }
+  .community-perks, .community-actions { justify-content: center; }
+  .community-dock { width: 100%; }
+}
+@media (max-width: 760px) { .community-card { padding: 24px 18px; border-radius: 18px; } }
+@media (prefers-reduced-motion: reduce) {
+  .community-dot { animation: none; }
+  .community-btn, .community-arr, .community-pass, .community-copy-tip { transition: opacity .15s ease; }
+  .community-card:hover .community-pass, .community-btn:hover, .community-btn:hover .community-arr { transform: none; }
 }

@@ -89,11 +89,29 @@ def check_config():
         warn("site.baidu 未配置 —— 建议与主站共用相同的百度统计 ID")
     elif not re.match(r"^[0-9a-fA-F]{32}$", baidu):
         err(f"site.baidu 格式不正确（{baidu}），应为 32 位十六进制字符串")
+
+    comm = conf.get("community", {})
+    wc = comm.get("wechat") or {}
+    wechat_enabled = wc.get("enabled", True) is not False
+    wx_id = (wc.get("id") or "").strip()
+    tg = comm.get("telegram") or {}
+    tg_url = (tg.get("inviteUrl") or "").strip()
+    tg_qr = (tg.get("qrImage") or "telegram-qr.svg").strip()
+    if wechat_enabled and not wx_id and not tg_url:
+        warn("community.wechat.id 与 community.telegram.inviteUrl 均未配置 —— 配好 ~/.config/aic/community.env 后跑 make community")
+    elif not wechat_enabled and not tg_url:
+        warn("community.telegram.inviteUrl 未配置 —— 跑 make community 生成")
+    if tg_url:
+        if not tg_url.startswith("https://t.me/"):
+            err(f"community.telegram.inviteUrl 格式不正确（{tg_url}），应以 https://t.me/ 开头")
+        if tg_qr and not os.path.exists(os.path.join(ROOT, tg_qr)):
+            err(f"community.telegram.inviteUrl 已配置，但找不到二维码文件 {tg_qr} —— 跑 make community 生成")
     return conf
 
 
 def check_pages(conf):
     titles, descs = {}, {}
+    wechat_enabled = (((conf or {}).get("community") or {}).get("wechat") or {}).get("enabled", True) is not False
     for fn in html_files():
         h = read(fn)
 
@@ -133,6 +151,10 @@ def check_pages(conf):
 
         if "GEO:AUTO START" not in h and not fn.startswith("devlog"):
             warn(f"{fn}: 没有 GEO:AUTO 标记，gen_geo.py 不会维护它的 head")
+
+        if (re.search(r'<html[^>]+lang="zh', h, re.I) and wechat_enabled) or ".huawei" in fn:
+            if re.search(r"https?://(?:t\.me|telegram\.me)/", h, re.I):
+                err(f"{fn}: 中文页或国内渠道页禁止包含境外 Telegram 链接（t.me/）—— 请保持与英文站物理隔离")
 
         s_conf = conf.get("site", {}) if conf else {}
         ga4 = (s_conf.get("ga4") or s_conf.get("ga") or "").strip()

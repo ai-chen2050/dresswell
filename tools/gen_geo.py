@@ -18,6 +18,7 @@ meta、每种语言的 JSON-LD、llms.txt、sitemap）。手工维护的结果�
 所以：改配置，不改生成物。
 """
 
+import html as html_lib
 import json
 import os
 import re
@@ -40,6 +41,9 @@ AI_AGENTS = [
 ]
 
 def get_today() -> str:
+    """获取 GEO 层（sitemap / llms-full）使用的更新日期。
+    优先读取 GEO_DATE 环境变量、site.config.json 的 site.updated，
+    CI 环境下回退到已提交的 sitemap.xml <lastmod>，避免隔天/跨时区 CI 假报 diff。"""
     if os.environ.get("GEO_DATE"):
         return os.environ["GEO_DATE"]
     try:
@@ -167,7 +171,7 @@ LABELS = {
 
 def alt_names(conf, code):
     """别名列表，去掉当前语言已经用作主名的那一个 ——
-    不去的话英文页会写成 "DressWell (DressWell, 穿好衣, …)"。"""
+    不去的话英文页会写成 "Foo (Foo, 福, …)" —— 主名在括号里又出现一次。"""
     name = t(conf["site"].get("name", ""), code)
     return [a for a in conf["site"].get("altNames", []) if a != name]
 
@@ -248,6 +252,11 @@ def gen_llms(conf, code):
     for key in ("appStore", "googlePlay", "huawei", "steam", "web", "github"):
         if conf.get("links", {}).get(key):
             L.append(f"- **{B['store'][key]}**: {conf['links'][key]}")
+    comm = conf.get("community") or {}
+    wechat_enabled = (comm.get("wechat") or {}).get("enabled", True) is not False
+    tg_url = (comm.get("telegram") or {}).get("inviteUrl", "").strip()
+    if (not code.startswith("zh") or not wechat_enabled) and tg_url:
+        L.append(f"- **Telegram Community**: {tg_url}")
     L.append("")
 
     if conf.get("features"):
@@ -301,6 +310,11 @@ def gen_llms_full(conf, code):
     for key in ("appStore", "googlePlay", "huawei", "steam", "web"):
         if conf.get("links", {}).get(key):
             L.append(f"- **{B['store'][key]}**: {conf['links'][key]}")
+    comm = conf.get("community") or {}
+    wechat_enabled = (comm.get("wechat") or {}).get("enabled", True) is not False
+    tg_url = (comm.get("telegram") or {}).get("inviteUrl", "").strip()
+    if (not code.startswith("zh") or not wechat_enabled) and tg_url:
+        L.append(f"- **Telegram Community**: {tg_url}")
     L += ["", "---", ""]
 
     diff = conf.get("differentiators", {})
@@ -372,7 +386,7 @@ def build_jsonld(conf, page_file, code):
     if s.get("category"):
         app["applicationCategory"] = s["category"]
     app["offers"] = {"@type": "Offer", "price": s.get("price", "0"),
-                     "priceCurrency": s.get("currency", "USD")}
+                     "priceCurrency": t(s.get("currency", "USD"), code)}
     if s.get("author", {}).get("name"):
         app["author"] = {"@type": "Organization", "name": s["author"]["name"]}
         if s["author"].get("email"):
@@ -402,7 +416,9 @@ def build_jsonld(conf, page_file, code):
 
 
 def build_ga4(conf):
-    """生成 Google Analytics 4 (gtag.js) + 百度统计 (hm.js) + SPA 路由切换追踪脚本。"""
+    """生成 Google Analytics 4 (gtag.js) + 百度统计 (hm.js) + SPA 路由切换追踪脚本。
+    ⚠️ GitHub Pages 子项目仓库（如 xxx.github.io/app/）不会继承主站 HTML 的统计代码，
+    必须在子仓库每个页面独立注入相同的测量 ID，并监听 History API / hash 变化。"""
     s = conf.get("site", {})
     ga4_id = (s.get("ga4") or s.get("ga") or "").strip()
     ba_id = (s.get("baidu") or s.get("ba") or "").strip()
@@ -524,6 +540,298 @@ def build_head(conf, page, code):
 
 MARK_START = "<!-- GEO:AUTO START -->"
 MARK_END = "<!-- GEO:AUTO END -->"
+COMM_START = "<!-- COMMUNITY:AUTO START -->"
+COMM_END = "<!-- COMMUNITY:AUTO END -->"
+
+
+def _js_sq(s: str) -> str:
+    """转义单引号 JS 字符串并过滤 HTML 属性风险字符。"""
+    return html_lib.escape(
+        s.replace("\\", "\\\\").replace("'", "\\'").replace("\n", " ").replace("\r", ""),
+        quote=True,
+    )
+
+
+_SVG_WECHAT = (
+    '<svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+    '<path d="M8.5 4C4.36 4 1 6.79 1 10.22c0 1.97 1.11 3.72 2.83 4.86L3.1 17.5a.4.4 0 0 0 .56.47l2.9-1.45'
+    'c.62.15 1.28.23 1.94.23h.48A5.7 5.7 0 0 1 8.8 15c0-3.15 2.97-5.7 6.65-5.7.34 0 .68.02 1 .07'
+    'C15.86 6.29 12.53 4 8.5 4zm-2.4 5a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9zm4.8 0a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9z'
+    'M15.45 10.6c-3.18 0-5.75 2.13-5.75 4.76 0 2.63 2.57 4.76 5.75 4.76.57 0 1.13-.07 1.66-.2l2.37 1.18'
+    'a.35.35 0 0 0 .49-.4l-.61-2.01c1.14-.91 1.84-2.05 1.84-3.33 0-2.63-2.57-4.76-5.75-4.76z'
+    'm-1.9 3.9a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6zm3.8 0a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6z"/></svg>'
+)
+_SVG_TG = (
+    '<svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+    '<path d="M21.93 4.66c.29-1.22-.44-1.7-1.56-1.28L2.88 10.13c-1.19.48-1.17 1.15-.21 1.44l4.48 1.4 '
+    '10.39-6.55c.49-.3.94-.13.57.19L9.7 14.21l-.31 4.65c.46 0 .66-.21.92-.46l2.2-2.14 4.58 3.38'
+    'c.84.46 1.45.22 1.66-.78l3.18-14.2z"/></svg>'
+)
+_SVG_MAIL = (
+    '<svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>'
+)
+_SVG_COPY = (
+    '<svg class="ic ic-copy" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>'
+)
+_SVG_CHECK = (
+    '<svg class="ic ic-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+    'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<path d="M20 6 9 17l-5-5"/></svg>'
+)
+_SVG_BOLT = (
+    '<svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>'
+)
+_SVG_SPARK = (
+    '<svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<path d="m12 3 1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></svg>'
+)
+_SVG_COMPASS = (
+    '<svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.3 5.2-5.2 2.3 2.3-5.2 5.2-2.3z"/></svg>'
+)
+
+
+def _copy_onclick(wx_id: str, remark: str) -> str:
+    js_id = _js_sq(wx_id)
+    js_rm = _js_sq(remark)
+    return (
+        f"(function(b){{var id='{js_id}',msg='已复制，请备注「{js_rm}」',"
+        f"fail='请手动添加：{js_id}',tip=b.nextElementSibling;"
+        "clearTimeout(b._cpTimer);b.removeAttribute('data-copied');b.removeAttribute('data-failed');"
+        "if(tip)tip.textContent='';void b.offsetWidth;"
+        "function show(ok){var m=ok?msg:fail;if(window.__aicLastTip===m)m+='\\u00A0';"
+        "window.__aicLastTip=m;b.setAttribute(ok?'data-copied':'data-failed','');"
+        "requestAnimationFrame(function(){if(tip)tip.textContent=m;});"
+        "b._cpTimer=setTimeout(function(){b.removeAttribute('data-copied');b.removeAttribute('data-failed');"
+        "if(tip)tip.textContent='';},2200);}"
+        "function legacy(){var f=document.createElement('textarea');f.value=id;"
+        "f.setAttribute('readonly','');f.style.cssText='position:fixed;inset-block-start:0;opacity:0';"
+        "document.body.appendChild(f);f.select();var ok=false;try{ok=document.execCommand('copy');}"
+        "finally{f.remove();}return ok;}"
+        "if(navigator.clipboard&&navigator.clipboard.writeText){"
+        "navigator.clipboard.writeText(id).then(function(){show(true);},function(){show(legacy());});"
+        "}else{show(legacy());}})(this)"
+    )
+
+
+def _qr_frame(inner_html: str) -> str:
+    return (
+        '<div class="community-qr-frame">'
+        '<span class="qr-corner tl" aria-hidden="true"></span>'
+        '<span class="qr-corner tr" aria-hidden="true"></span>'
+        '<span class="qr-corner bl" aria-hidden="true"></span>'
+        '<span class="qr-corner br" aria-hidden="true"></span>'
+        f"{inner_html}"
+        "</div>"
+    )
+
+
+def build_community_block(conf, code):
+    """按语言与上线地区生成 Raycast / Bento 风格社群展示舱（大陆走微信；海外或无微信走 Telegram）。"""
+    comm = conf.get("community") or {}
+    wc = comm.get("wechat") or {}
+    wechat_enabled = wc.get("enabled", True) is not False
+    email = ((conf.get("site") or {}).get("author") or {}).get("email", "").strip()
+    contact_href = ((conf.get("links") or {}).get("contact") or "").strip()
+    if not contact_href and email and email != "you@example.com":
+        contact_href = f"mailto:{email}"
+
+    if code.startswith("zh") and wechat_enabled:
+        wx_id = (wc.get("id") or "").strip()
+        qr_rel = (wc.get("qrImage") or "wechat-qr.png").strip()
+        remark = (wc.get("remark") or t(conf["site"].get("name", ""), code) or "").strip()
+        qr_exists = bool(qr_rel and os.path.exists(os.path.join(ROOT, qr_rel)))
+
+        if qr_exists:
+            qr_html = (
+                f'<img src="{html_lib.escape(qr_rel, quote=True)}" '
+                f'alt="开发者微信二维码" class="community-qr" width="148" height="148" loading="lazy">'
+            )
+        else:
+            qr_html = (
+                '<div class="community-qr-placeholder">'
+                '<span>微信名片码待放入</span>'
+                f'<small>{html_lib.escape(qr_rel or "wechat-qr.png")}</small>'
+                '</div>'
+            )
+
+        actions = []
+        if wx_id:
+            actions.append(
+                f'<div class="community-wx-dock">{_SVG_WECHAT}'
+                f'<code class="community-wx-id">{html_lib.escape(wx_id)}</code>'
+                f'<span class="community-wx-remark">备注「{html_lib.escape(remark)}」</span></div>'
+            )
+            actions.append(
+                '<span class="community-copy-wrap">'
+                f'<button type="button" class="community-btn community-copy-btn" onclick="{_copy_onclick(wx_id, remark)}">'
+                f'{_SVG_COPY}{_SVG_CHECK}<span>复制微信号进群</span></button>'
+                '<span class="community-copy-tip" role="status"></span>'
+                '</span>'
+            )
+        else:
+            actions.append(
+                '<span class="community-pending">个人微信号待配置（配置 ~/.config/aic/community.env 后跑 make community）</span>'
+            )
+        if contact_href:
+            actions.append(
+                f'<a class="community-btn secondary" href="{html_lib.escape(contact_href, quote=True)}">'
+                f'{_SVG_MAIL}<span>发邮件反馈</span></a>'
+            )
+
+        return (
+            '<article class="community-card community-wechat">\n'
+            '  <div class="community-inner">\n'
+            '    <div class="community-main">\n'
+            '      <div class="community-head">\n'
+            f'        <span class="community-badge"><span class="community-dot" aria-hidden="true"></span>{_SVG_WECHAT}<span>国内用户社群 · 微信直连</span></span>\n'
+            '        <h3>加入用户共创群 · 直接与开发者对话</h3>\n'
+            '      </div>\n'
+            '      <div class="community-copy">\n'
+            f'        <p>个人微信名片长期有效。扫码或复制微信号添加好友，备注「<strong>{html_lib.escape(remark)}</strong>」即邀你进入专属产品群。</p>\n'
+            f'        <ul class="community-perks"><li>{_SVG_BOLT}<span>开发者本人直连秒回</span></li><li>{_SVG_SPARK}<span>抢先体验内测新版本</span></li><li>{_SVG_COMPASS}<span>许愿新功能与极速修 Bug</span></li></ul>\n'
+            '      </div>\n'
+            f'      <div class="community-actions">{"".join(actions)}</div>\n'
+            '    </div>\n'
+            '    <div class="community-dock">\n'
+            '      <div class="community-pass">\n'
+            '        <div class="community-pass-top"><span class="community-pass-kicker">WECHAT PASS</span><span class="community-pass-tag">微信直连</span></div>\n'
+            f'        {_qr_frame(qr_html)}\n'
+            f'        <div class="community-pass-sub">微信扫一扫 · 备注「{html_lib.escape(remark)}」</div>\n'
+            '      </div>\n'
+            '    </div>\n'
+            '  </div>\n'
+            '</article>'
+        )
+
+    tg = comm.get("telegram") or {}
+    invite_url = (tg.get("inviteUrl") or "").strip()
+    topic_url = (tg.get("topicUrl") or "").strip()
+    tg_qr = (tg.get("qrImage") or "telegram-qr.svg").strip()
+    qr_exists = bool(invite_url and tg_qr and os.path.exists(os.path.join(ROOT, tg_qr)))
+
+    if code.startswith("zh"):
+        if qr_exists:
+            qr_html = (
+                f'<img src="{html_lib.escape(tg_qr, quote=True)}" '
+                'alt="Telegram 交流群二维码" class="community-qr" width="148" height="148" loading="lazy">'
+            )
+        else:
+            qr_html = (
+                '<div class="community-qr-placeholder">'
+                '<span>Telegram 二维码</span>'
+                '<small>跑 make community 生成</small>'
+                '</div>'
+            )
+        actions = []
+        if invite_url:
+            actions.append(
+                f'<a class="community-btn" href="{html_lib.escape(invite_url, quote=True)}" '
+                f'target="_blank" rel="noopener noreferrer">{_SVG_TG}<span>加入 Telegram 交流群</span><span class="community-arr" aria-hidden="true">→</span></a>'
+            )
+            if topic_url:
+                actions.append(
+                    f'<a class="community-btn secondary" href="{html_lib.escape(topic_url, quote=True)}" '
+                    'target="_blank" rel="noopener noreferrer"><span>直达专属话题</span></a>'
+                )
+        else:
+            actions.append(
+                '<span class="community-pending">Telegram 社群尚未关联（跑 make community 自动创建）</span>'
+            )
+        if contact_href:
+            actions.append(
+                f'<a class="community-btn secondary" href="{html_lib.escape(contact_href, quote=True)}">{_SVG_MAIL}<span>发邮件反馈</span></a>'
+            )
+        return (
+            '<article class="community-card community-tg">\n'
+            '  <div class="community-inner">\n'
+            '    <div class="community-main">\n'
+            '      <div class="community-head">\n'
+            f'        <span class="community-badge"><span class="community-dot" aria-hidden="true"></span>{_SVG_TG}<span>BK Labs · 全球 Telegram</span></span>\n'
+            '        <h3>加入用户共创群 · 直接与开发者对话</h3>\n'
+            '      </div>\n'
+            '      <div class="community-copy">\n'
+            '        <p>欢迎加入官方 Telegram 专属话题群，反馈 Bug、参与功能投票，第一时间获取测试包与版本更新。</p>\n'
+            f'        <ul class="community-perks"><li>{_SVG_BOLT}<span>开发者直连交流</span></li><li>{_SVG_SPARK}<span>新版本与路线图预告</span></li><li>{_SVG_COMPASS}<span>反馈问题极速响应</span></li></ul>\n'
+            '      </div>\n'
+            f'      <div class="community-actions">{"".join(actions)}</div>\n'
+            '    </div>\n'
+            '    <div class="community-dock">\n'
+            '      <div class="community-pass">\n'
+            '        <div class="community-pass-top"><span class="community-pass-kicker">SCAN TO JOIN</span><span class="community-pass-tag">TELEGRAM</span></div>\n'
+            f'        {_qr_frame(qr_html)}\n'
+            '        <div class="community-pass-sub">手机扫码或直连进群</div>\n'
+            '      </div>\n'
+            '    </div>\n'
+            '  </div>\n'
+            '</article>'
+        )
+
+    if qr_exists:
+        qr_html = (
+            f'<img src="{html_lib.escape(tg_qr, quote=True)}" '
+            'alt="Telegram Community QR Code" class="community-qr" width="148" height="148" loading="lazy">'
+        )
+    else:
+        qr_html = (
+            '<div class="community-qr-placeholder">'
+            '<span>Telegram QR</span>'
+            '<small>Run make community</small>'
+            '</div>'
+        )
+
+    actions = []
+    if invite_url:
+        actions.append(
+            f'<a class="community-btn" href="{html_lib.escape(invite_url, quote=True)}" '
+            f'target="_blank" rel="noopener noreferrer">{_SVG_TG}<span>Join on Telegram</span><span class="community-arr" aria-hidden="true">→</span></a>'
+        )
+        if topic_url:
+            actions.append(
+                f'<a class="community-btn secondary" href="{html_lib.escape(topic_url, quote=True)}" '
+                'target="_blank" rel="noopener noreferrer"><span>Open Topic Thread</span></a>'
+            )
+    else:
+        actions.append(
+            '<span class="community-pending">Telegram group not linked yet (run make community)</span>'
+        )
+    if contact_href:
+        actions.append(
+            f'<a class="community-btn secondary" href="{html_lib.escape(contact_href, quote=True)}">{_SVG_MAIL}<span>Email Support</span></a>'
+        )
+
+    return (
+        '<article class="community-card community-tg">\n'
+        '  <div class="community-inner">\n'
+        '    <div class="community-main">\n'
+        '      <div class="community-head">\n'
+        f'        <span class="community-badge"><span class="community-dot" aria-hidden="true"></span>{_SVG_TG}<span>BK Labs · Global Telegram</span></span>\n'
+        '        <h3>Join the User Community &amp; Shape the Roadmap</h3>\n'
+        '      </div>\n'
+        '      <div class="community-copy">\n'
+        '        <p>Chat directly with the developer and fellow users on Telegram. Share bug reports, request new features, and follow release updates.</p>\n'
+        f'        <ul class="community-perks"><li>{_SVG_BOLT}<span>Direct Maker Replies</span></li><li>{_SVG_SPARK}<span>Vote on Next Features</span></li><li>{_SVG_COMPASS}<span>Early Beta &amp; Release Notes</span></li></ul>\n'
+        '      </div>\n'
+        f'      <div class="community-actions">{"".join(actions)}</div>\n'
+        '    </div>\n'
+        '    <div class="community-dock">\n'
+        '      <div class="community-pass">\n'
+        '        <div class="community-pass-top"><span class="community-pass-kicker">SCAN TO JOIN</span><span class="community-pass-tag">TELEGRAM</span></div>\n'
+        f'        {_qr_frame(qr_html)}\n'
+        '        <div class="community-pass-sub">Point phone camera to join</div>\n'
+        '      </div>\n'
+        '    </div>\n'
+        '  </div>\n'
+        '</article>'
+    )
 
 
 def inject(conf):
@@ -545,6 +853,10 @@ def inject(conf):
             block = f"{MARK_START}\n{build_head(conf, page, l['code'])}\n{MARK_END}"
             html = re.sub(re.escape(MARK_START) + r".*?" + re.escape(MARK_END),
                           lambda _: block, html, flags=re.S)
+            if COMM_START in html and COMM_END in html:
+                comm_block = f"{COMM_START}\n{build_community_block(conf, l['code'])}\n{COMM_END}"
+                html = re.sub(re.escape(COMM_START) + r".*?" + re.escape(COMM_END),
+                              lambda _: comm_block, html, flags=re.S)
             with open(path, "w", encoding="utf-8") as f:
                 f.write(html)
             n += 1
