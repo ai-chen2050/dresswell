@@ -10,6 +10,8 @@
   - 使用 App 内置「亚洲」默认高定形象（`base.glb` + 银白丸子头 `part_hair_bun_ccby` `[0.86, 0.84, 0.82]` + 碎花层叠裙 `part_dress_tierskirt` + 高跟凉鞋 `part_shoes_heels` + 肤色妆容合成 `SkinTexture.compose`/`retone(0.25, 0.50)` + `lowlip: -0.35`），经 MIT 开源 `Faltwerk` 管线按面部 `2.2mm` / 发丝 `4.2mm` / 服饰 `5.2mm` 分层采样并启用 `--look lit` 工作室三点柔光烘焙，将 64 帧转身走秀动画压缩为 `6.60 MB`（`6.30 MiB`：`s0000.falt` `3,470,689 B` + `s0001.falt` `3,133,761 B`，`93,854` 粒子，`24 fps` 下 `19.81 Mbit/s`，`roundtrip_all_ok: true`），较 64 帧未压缩 float32 SH0 PLY（`336.37 MB`）缩减 `98.0%`（`50.9×`）；
   - 通过 `navigator.gpu.requestAdapter()` 自动探测浏览器 WebGPU 支持，可用时在 `runway4d/viewer.html` 中 360° 轨道交互与播放/暂停播控并在加载就绪后隐藏静态海报，不支持 WebGPU 的环境优雅回退为 Blender EEVEE 工作室海报 `runway4d/poster.jpg`；
   - 在中文/英文首页导航、Hero CTA 与页脚加入直达入口，并按 `ai-dress-site` GEO 规范注册至 `site.config.json`（含中英双语隔离校验与 Faltwerk MIT 署名）。
+- **修复 GitHub Pages 工作流部署失败（`.github/workflows/pages.yml`）**：
+  - 将官方 Actions 升级至 Node 24 支持版本（`actions/checkout@v4 → v7`、`actions/setup-python@v5 → v7`、`actions/configure-pages@v5 → v6`、`actions/upload-pages-artifact@v3 → v5`、`actions/deploy-pages@v4 → v5`），并将 `configure-pages` 与 `upload-pages-artifact` 前置到 `check` job、确保 `github-pages` 工件提交就绪后再由独立的 `deploy` job 执行发布，解决 `No artifacts named "github-pages" were found` 报错并消除 Node.js 20 弃用告警。
 
 ## 2026-11-18
 
