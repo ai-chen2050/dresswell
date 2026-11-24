@@ -9,7 +9,7 @@
     <!-- 下面这一段由 tools/gen_geo.py 从 site.config.json 生成，勿手改 -->
     <!-- GEO:AUTO START -->
 <title>4D 默认形象互动走秀（WebGPU 4DGS） · 穿好衣</title>
-<meta name="description" content="穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧转身走秀压缩为 6.60 MB（93,854 分层精度粒子、2 段 .falt），支持浏览器免安装 360° 环绕预览。">
+<meta name="description" content="穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧多姿态秀场动作压缩为 4.58 MB（4 段极速流、首段仅 1.26 MB、73,415 分层精度粒子），支持香槟/暮色秀场灯光、多机位特写、360° 自由环绕与无 WebGPU 端 8 视角轻量互动回退。">
 <meta name="keywords" content="虚拟试衣, 3D 试衣间, 数字衣橱, 穿搭搭配, 试衣 App, 离线, 隐私, 捏脸, 衣橱管理, AI 搭配师">
 <link rel="canonical" href="https://chuanhaoyi.top/runway4d.html">
 <link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/runway4d.html">
@@ -17,7 +17,7 @@
 <link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/runway4d.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="4D 默认形象互动走秀（WebGPU 4DGS） · 穿好衣">
-<meta property="og:description" content="穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧转身走秀压缩为 6.60 MB（93,854 分层精度粒子、2 段 .falt），支持浏览器免安装 360° 环绕预览。">
+<meta property="og:description" content="穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧多姿态秀场动作压缩为 4.58 MB（4 段极速流、首段仅 1.26 MB、73,415 分层精度粒子），支持香槟/暮色秀场灯光、多机位特写、360° 自由环绕与无 WebGPU 端 8 视角轻量互动回退。">
 <meta property="og:url" content="https://chuanhaoyi.top/runway4d.html">
 <meta property="og:image" content="https://chuanhaoyi.top/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -131,7 +131,7 @@
     </script>
     <style>
       .runway-hero {
-        padding: 72px 0 44px;
+        padding: 64px 0 38px;
         background:
           radial-gradient(110% 85% at 85% 0%, var(--accent-soft) 0%, transparent 56%),
           linear-gradient(180deg, var(--bg2), var(--bg));
@@ -139,58 +139,275 @@
       }
       .runway-hero h1 {
         font-family: var(--serif); font-weight: 400;
-        font-size: clamp(34px, 5.4vw, 60px); line-height: 1.08;
-        letter-spacing: -.015em; margin-top: 16px;
+        font-size: clamp(32px, 5.2vw, 56px); line-height: 1.08;
+        letter-spacing: -.015em; margin-top: 14px;
       }
-      .runway-hero .lead { margin-top: 16px; max-width: 62ch; }
-      .runway-stage-sec { padding: 48px 0 72px; }
+      .runway-hero .lead { margin-top: 14px; max-width: 64ch; }
+      .runway-stage-sec { padding: 36px 0 68px; }
       .runway-stage {
-        border-radius: 18px; overflow: hidden;
-        border: 1px solid var(--line); background: #100e0c;
+        position: relative;
+        border-radius: 20px; overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: #0d0a08;
         box-shadow: var(--shadow);
       }
       .runway-bar {
+        position: relative; z-index: 6;
         display: flex; align-items: center; justify-content: space-between;
-        gap: 12px; padding: 12px 18px;
-        background: rgba(25, 21, 18, 0.94); color: #f3ece3;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 10px 14px; padding: 11px 16px;
+        background: rgba(18, 14, 11, 0.92); color: #f3ece3;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.09);
         font-size: 13px; flex-wrap: wrap;
       }
-      .runway-bar-title { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; }
-      .runway-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ed4a2; box-shadow: 0 0 10px rgba(78, 212, 162, 0.7); }
-      .runway-bar-actions { display: inline-flex; align-items: center; gap: 10px; }
+      .runway-bar-title { display: inline-flex; align-items: center; gap: 9px; font-weight: 600; min-width: 0; }
+      .runway-dot {
+        width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+        background: #e8c78c; box-shadow: 0 0 10px rgba(232, 199, 140, 0.7);
+        transition: background .25s ease, box-shadow .25s ease;
+      }
+      .runway-dot.is-live { background: #4ed4a2; box-shadow: 0 0 10px rgba(78, 212, 162, 0.78); }
+      .runway-dot.is-fallback { background: #e8b574; box-shadow: 0 0 8px rgba(232, 181, 116, 0.55); }
+      .runway-bar-actions { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .runway-mood-group {
+        display: inline-flex; align-items: center;
+        padding: 2px; border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.11);
+      }
+      .runway-pill-btn {
+        appearance: none; border: 0; background: transparent; color: #cfc4b7;
+        border-radius: 999px; padding: 4px 10px; font-size: 11.5px; font-weight: 600;
+        cursor: pointer; transition: background .16s ease, color .16s ease;
+      }
+      .runway-pill-btn:hover { color: #fff; }
+      .runway-pill-btn.is-active { background: rgba(255, 255, 255, 0.16); color: #fff8ee; }
       .runway-btn {
         appearance: none; border: 1px solid rgba(255, 255, 255, 0.18);
         background: rgba(255, 255, 255, 0.08); color: #f3ece3;
-        border-radius: 999px; padding: 5px 13px; font-size: 12px; font-weight: 600;
-        cursor: pointer; text-decoration: none;
+        border-radius: 999px; padding: 5px 12px; font-size: 12px; font-weight: 600;
+        cursor: pointer; text-decoration: none; transition: background .16s ease, color .16s ease, border-color .16s ease;
       }
       .runway-btn:hover { background: #2ebd85; border-color: #2ebd85; color: #04241a; text-decoration: none; }
       .runway-viewport {
+        --spot-key: rgba(255, 224, 178, 0.16);
+        --spot-rim: rgba(255, 244, 224, 0.09);
+        --halo: rgba(232, 188, 126, 0.22);
+        --floor-glow: rgba(232, 193, 134, 0.26);
+        --rail: rgba(242, 207, 152, 0.34);
+        --bg-top: #18130f;
+        --bg-bot: #090706;
         position: relative; width: 100%; overflow: hidden;
-        height: clamp(460px, 68vh, 680px);
-        background: radial-gradient(circle at 50% 42%, #241e19 0%, #100e0c 72%);
+        height: clamp(490px, 72vh, 720px);
+        background: radial-gradient(circle at 50% 38%, var(--bg-top) 0%, var(--bg-bot) 76%);
         display: grid; place-items: center;
+        user-select: none; -webkit-user-select: none;
       }
-      .runway-poster {
+      .runway-viewport[data-mood="moonlight"] {
+        --spot-key: rgba(168, 206, 255, 0.16);
+        --spot-rim: rgba(226, 238, 255, 0.09);
+        --halo: rgba(154, 196, 255, 0.20);
+        --floor-glow: rgba(160, 202, 255, 0.24);
+        --rail: rgba(186, 218, 255, 0.30);
+        --bg-top: #111521;
+        --bg-bot: #07080d;
+      }
+      .runway-viewport[data-mood="noir"] {
+        --spot-key: rgba(255, 255, 255, 0.03);
+        --spot-rim: rgba(255, 255, 255, 0.02);
+        --halo: rgba(255, 255, 255, 0.04);
+        --floor-glow: rgba(255, 255, 255, 0.05);
+        --rail: rgba(255, 255, 255, 0.08);
+        --bg-top: #151210;
+        --bg-bot: #0c0a09;
+      }
+
+      /* Couture Runway Architectural Backdrop Layers */
+      .stage-backdrop {
+        position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+      }
+      .stage-beam-left, .stage-beam-right {
+        position: absolute; top: -14%; height: 112%; pointer-events: none;
+        filter: blur(34px); transform-origin: top center;
+      }
+      .stage-beam-left {
+        left: 10%; width: 46%;
+        background: linear-gradient(180deg, var(--spot-key) 0%, rgba(255, 255, 255, 0.02) 72%, transparent 100%);
+        clip-path: polygon(30% 0%, 66% 0%, 98% 100%, 2% 100%);
+        animation: beamSwayL 9s ease-in-out infinite alternate;
+      }
+      .stage-beam-right {
+        right: 10%; width: 42%;
+        background: linear-gradient(180deg, var(--spot-rim) 0%, rgba(255, 255, 255, 0.01) 74%, transparent 100%);
+        clip-path: polygon(34% 0%, 70% 0%, 96% 100%, 4% 100%);
+        animation: beamSwayR 11s ease-in-out infinite alternate;
+      }
+      .stage-aura {
+        position: absolute; left: 50%; top: 44%; width: min(560px, 84vw); height: min(560px, 84vw);
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, var(--halo) 0%, transparent 66%);
+        filter: blur(18px);
+      }
+      .stage-floor {
+        position: absolute; left: -10%; right: -10%; bottom: -2%; height: 32%;
+        perspective: 620px; pointer-events: none;
+      }
+      .stage-deck {
         position: absolute; inset: 0;
+        transform-origin: bottom center;
+        transform: rotateX(66deg);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(12, 10, 8, 0.9) 34%, #080605 100%),
+          radial-gradient(ellipse 46% 62% at 50% 42%, var(--floor-glow) 0%, transparent 72%);
+        border-top: 1px solid rgba(255, 255, 255, 0.10);
+      }
+      .stage-deck::before, .stage-deck::after {
+        content: ""; position: absolute; top: 0; bottom: 0; width: 2px;
+        background: linear-gradient(180deg, transparent 0%, var(--rail) 35%, rgba(255,255,255,0.06) 100%);
+      }
+      .stage-deck::before { left: 32%; }
+      .stage-deck::after { right: 32%; }
+      .stage-shadow-pool {
+        position: absolute; left: 50%; bottom: 7.5%; width: 210px; height: 34px;
+        transform: translateX(-50%);
+        background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.25) 58%, transparent 78%);
+        filter: blur(5px);
+      }
+      .stage-bokeh span {
+        position: absolute; border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 236, 200, 0.55) 0%, rgba(255, 224, 178, 0) 70%);
+        opacity: 0.22;
+        animation: moteFloat 12s ease-in-out infinite;
+      }
+      .stage-bokeh span:nth-child(1) { width: 16px; height: 16px; left: 18%; top: 26%; animation-delay: 0s; }
+      .stage-bokeh span:nth-child(2) { width: 10px; height: 10px; left: 77%; top: 22%; animation-delay: -3s; }
+      .stage-bokeh span:nth-child(3) { width: 20px; height: 20px; left: 26%; top: 54%; animation-delay: -5.5s; }
+      .stage-bokeh span:nth-child(4) { width: 12px; height: 12px; left: 72%; top: 48%; animation-delay: -8s; }
+      .stage-bokeh span:nth-child(5) { width: 8px; height: 8px; left: 38%; top: 18%; animation-delay: -2s; }
+      .stage-bokeh span:nth-child(6) { width: 14px; height: 14px; left: 63%; top: 62%; animation-delay: -7s; }
+
+      @keyframes beamSwayL { from { transform: rotate(-3deg) scaleX(0.96); } to { transform: rotate(2deg) scaleX(1.04); } }
+      @keyframes beamSwayR { from { transform: rotate(3deg) scaleX(0.96); } to { transform: rotate(-2deg) scaleX(1.04); } }
+      @keyframes moteFloat {
+        0%, 100% { transform: translateY(0) scale(0.92); opacity: 0.14; }
+        50% { transform: translateY(-16px) scale(1.12); opacity: 0.34; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .stage-beam-left, .stage-beam-right, .stage-bokeh span { animation: none; }
+      }
+
+      /* Poster / 8-angle Fallback Runway Canvas */
+      .runway-poster-layer {
+        position: absolute; inset: 0; z-index: 1;
+        display: grid; place-items: center;
+        transition: opacity .45s ease;
+        cursor: grab; touch-action: none;
+        -webkit-mask-image: radial-gradient(ellipse 68% 92% at 50% 48%, #000 58%, transparent 96%);
+        mask-image: radial-gradient(ellipse 68% 92% at 50% 48%, #000 58%, transparent 96%);
+      }
+      .runway-poster-layer:active { cursor: grabbing; }
+      .runway-poster-layer.is-hidden { opacity: 0; pointer-events: none; }
+      .runway-poster-img {
         width: 100%; height: 100%; object-fit: contain; display: block;
+        mix-blend-mode: lighten;
+        filter: contrast(1.03) saturate(1.05);
       }
+      .runway-fallback-canvas {
+        position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+        mix-blend-mode: lighten;
+      }
+
+      /* Live Transparent WebGPU Iframe */
       .runway-iframe {
-        position: absolute; inset: 0; width: 100%; height: 100%;
-        border: 0; opacity: 0; transition: opacity .35s ease;
+        position: absolute; inset: 0; z-index: 2;
+        width: 100%; height: 100%;
+        border: 0; background: transparent;
+        opacity: 0; pointer-events: none;
+        transition: opacity .5s ease;
       }
-      .runway-iframe.is-live { opacity: 1; }
+      .runway-iframe.is-live { opacity: 1; pointer-events: auto; }
+
+      /* Editorial Placard + Progress + Director Dock */
+      .runway-placard {
+        position: absolute; top: 16px; left: 18px; z-index: 4; pointer-events: none;
+        display: flex; flex-direction: column; gap: 3px;
+        padding: 8px 12px; border-radius: 12px;
+        background: rgba(14, 11, 9, 0.56);
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+      }
+      .runway-placard-tag {
+        font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+        color: #e8c78c; font-weight: 700;
+      }
+      .runway-placard-name {
+        font-size: 13px; color: #f6efe6; font-weight: 600;
+      }
+
+      .runway-stream-pill {
+        position: absolute; top: 16px; right: 16px; z-index: 4;
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 7px 12px; border-radius: 999px;
+        background: rgba(16, 13, 10, 0.78); color: #f1e6d8;
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(232, 199, 140, 0.34);
+        font-size: 12px; font-weight: 600;
+        transition: opacity .35s ease;
+      }
+      .runway-stream-pill[hidden] { display: none; }
+      .runway-stream-bar {
+        width: 58px; height: 4px; border-radius: 99px; overflow: hidden;
+        background: rgba(255, 255, 255, 0.14);
+      }
+      .runway-stream-fill {
+        display: block; height: 100%; width: 6%; border-radius: 99px;
+        background: linear-gradient(90deg, #e8c78c, #4ed4a2);
+        transition: width .18s ease;
+      }
+
+      .runway-dock {
+        position: relative; z-index: 6;
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 8px 12px; flex-wrap: wrap;
+        padding: 10px 16px;
+        background: rgba(15, 12, 10, 0.96);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .runway-dock-group {
+        display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap;
+        padding: 4px 5px; border-radius: 999px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .dock-btn {
+        appearance: none; border: 0; background: transparent; color: #ddd2c5;
+        border-radius: 999px; padding: 6px 12px; font-size: 12px; font-weight: 600;
+        cursor: pointer; transition: background .16s ease, color .16s ease;
+        white-space: nowrap;
+      }
+      .dock-btn:hover { background: rgba(255, 255, 255, 0.10); color: #fff; }
+      .dock-btn.is-active { background: #2ebd85; color: #04241a; }
+      .dock-btn.is-gold.is-active { background: #e8c78c; color: #1d150c; }
+
+      .runway-telemetry {
+        position: relative; z-index: 6;
+        padding: 10px 16px; font-size: 12px; color: #c7bdb1;
+        background: rgba(15, 12, 10, 0.96);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        font-variant-numeric: tabular-nums;
+      }
+      .runway-telemetry[hidden] { display: none; }
+
       .runway-fallback-note {
-        padding: 14px 18px; font-size: 13.5px; color: #d8cfc3;
-        background: rgba(25, 21, 18, 0.96);
+        position: relative; z-index: 6;
+        padding: 12px 18px; font-size: 13px; color: #dfd6ca;
+        background: rgba(24, 19, 15, 0.96);
         border-top: 1px solid rgba(255, 255, 255, 0.08);
         display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
       }
       .runway-fallback-note[hidden] { display: none; }
       .runway-tips {
         display: flex; flex-wrap: wrap; gap: 10px 22px;
-        margin-top: 18px; color: var(--sub); font-size: 13.5px;
+        margin-top: 16px; color: var(--sub); font-size: 13.5px;
       }
       .runway-note-box {
         margin-top: 32px; padding: 24px 26px; border-radius: 14px;
@@ -199,7 +416,10 @@
       .runway-note-box h3 { font-family: var(--serif); font-weight: 400; font-size: 22px; margin-bottom: 8px; }
       .runway-note-box p { color: var(--sub); font-size: 15px; }
       @media (max-width: 720px) {
-        .runway-viewport { height: clamp(390px, 64vh, 540px); }
+        .runway-viewport { height: clamp(410px, 58vh, 520px); }
+        .runway-placard { display: none; }
+        .runway-dock { justify-content: center; padding: 10px 10px 12px; }
+        .dock-btn { padding: 5px 10px; font-size: 11.5px; }
       }
     </style>
   </head>
@@ -220,12 +440,12 @@
 
     <header class="runway-hero">
       <div class="wrap">
-        <p class="kicker">Faltwerk 4DGS · WebGPU 网页实验</p>
-        <h1>把默认高定形象秀场，<br />压进 <em>6.60 MB</em> 实时旋转</h1>
+        <p class="kicker">Faltwerk 4DGS · 高定秀场实验厅</p>
+        <h1>把默认亚洲形象 T 台大秀，<br />压进 <em>4.58 MB</em> 自由运镜</h1>
         <p class="lead">
-          这是穿好衣官方默认造型（银白丸子头 × 碎花层叠裙 × 亚洲默认妆容与捏脸）的 WebGPU 4D 高斯溅射（4DGS）流式展示页：
-          按面部 2.2mm / 发丝 4.2mm / 服饰 5.2mm 分层采样并烘培工作室柔光，将 64 帧转身动画打包为 2 段 <code>.falt</code> 量化流，
-          直接在浏览器 GPU 实时解码播放与 360° 轨道交互，免下载 App 也能预览。
+          告别单调僵硬的原地转圈 —— 穿好衣默认造型（银白盘发丸子头 × 粉带碎花层叠吊带裙 × 亚洲精致五官）现在呈现完整的多姿态走秀编排：
+          从单手轻扶粉腰带的T台定格、碎步换重、端庄转身到自然微笑眨眼；按面部 2.2mm / 发丝 4.2mm / 服饰 5.2mm 分层采样，
+          压缩为 4 段渐进 <code>.falt</code> 流（首段仅 <strong>1.26 MB</strong>），支持多机位特写、灯光切换与非 WebGPU 端 8 视角轻量互动。
         </p>
       </div>
     </header>
@@ -237,37 +457,90 @@
             <div class="runway-bar">
               <span class="runway-bar-title">
                 <span class="runway-dot" id="gpu-dot" aria-hidden="true"></span>
-                <span id="stage-status">正在检测浏览器 WebGPU 能力 …</span>
+                <span id="stage-status">秀场舞台就绪 · 正在接入 WebGPU 4DGS 流 …</span>
               </span>
               <div class="runway-bar-actions">
-                <button type="button" class="runway-btn" id="fullscreen-btn">全屏走秀</button>
+                <div class="runway-mood-group" role="group" aria-label="秀场灯光">
+                  <button type="button" class="runway-pill-btn is-active" data-mood="champagne">香槟追光</button>
+                  <button type="button" class="runway-pill-btn" data-mood="moonlight">暮色银蓝</button>
+                  <button type="button" class="runway-pill-btn" data-mood="noir">极简黑棚</button>
+                </div>
+                <button type="button" class="runway-btn" id="telemetry-btn" aria-expanded="false">渲染参数</button>
+                <button type="button" class="runway-btn" id="fullscreen-btn">全屏秀场</button>
                 <a class="runway-btn" href="index.html">返回首页</a>
               </div>
             </div>
 
-            <div class="runway-viewport" id="runway-viewport">
-              <img
-                class="runway-poster"
-                id="runway-poster"
-                src="runway4d/poster.jpg"
-                alt="穿好衣 默认亚洲形象 3D 造型秀场渲染预览图"
-                width="900"
-                height="1200"
-              />
+            <div class="runway-viewport" id="runway-viewport" data-mood="champagne">
+              <div class="stage-backdrop" aria-hidden="true">
+                <div class="stage-beam-left"></div>
+                <div class="stage-beam-right"></div>
+                <div class="stage-aura"></div>
+                <div class="stage-bokeh">
+                  <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="stage-floor">
+                  <div class="stage-deck"></div>
+                </div>
+                <div class="stage-shadow-pool"></div>
+              </div>
+
+              <div class="runway-placard" aria-hidden="true">
+                <span class="runway-placard-tag">Signature Look · 01</span>
+                <span class="runway-placard-name">银白丸子头 × 碎花层叠吊带裙</span>
+              </div>
+
+              <div class="runway-stream-pill" id="stream-pill">
+                <span id="stream-label">正在准备 4D 高清模型 …</span>
+                <span class="runway-stream-bar"><span class="runway-stream-fill" id="stream-fill"></span></span>
+              </div>
+
+              <div class="runway-poster-layer" id="poster-layer" title="拖拽可预览 8 视角舞台">
+                <img
+                  class="runway-poster-img"
+                  id="runway-poster"
+                  src="runway4d/poster.jpg"
+                  alt="穿好衣 默认亚洲形象 T台造型工作室渲染预览"
+                  width="900"
+                  height="1200"
+                />
+                <canvas class="runway-fallback-canvas" id="fallback-canvas" hidden></canvas>
+              </div>
+            </div>
+
+            <div class="runway-dock" id="runway-dock">
+              <div class="runway-dock-group" role="group" aria-label="机位视角">
+                <button type="button" class="dock-btn is-active" data-preset="runway">T台全景</button>
+                <button type="button" class="dock-btn" data-preset="face">妆发特写</button>
+                <button type="button" class="dock-btn" data-preset="dress">花裙细节</button>
+                <button type="button" class="dock-btn" data-preset="back">露背剪裁</button>
+              </div>
+              <div class="runway-dock-group" role="group" aria-label="播控">
+                <button type="button" class="dock-btn is-active" id="play-toggle-btn">定格 / 走秀</button>
+                <button type="button" class="dock-btn is-gold" id="slow-toggle-btn">0.5× 慢赏</button>
+                <button type="button" class="dock-btn is-gold" id="orbit-toggle-btn">360° 环拍</button>
+              </div>
+            </div>
+
+            <div class="runway-telemetry" id="telemetry-bar" hidden>
+              等待首帧 GPU 提交 …
             </div>
 
             <div class="runway-fallback-note" id="fallback-note" hidden>
-              <span>
-                当前浏览器未启用 WebGPU（推荐使用 Chrome 113+ / Edge 113+ / Safari 26+），已自动切换为静态高精摄影预览。
+              <span id="fallback-reason">
+                当前浏览器未启用 WebGPU，已自动开启 8 视角轻量互动秀场（左右拖拽可 360° 环绕，桌面 Chrome/Edge 113+ 或 Safari 26+ 可解锁实时 4DGS 自由缩放）。
               </span>
-              <a class="runway-btn" href="https://apps.apple.com/app/id6808203178" target="_blank" rel="noopener">App Store 体验完整试衣间</a>
+              <span style="display:inline-flex; gap:8px; flex-wrap:wrap;">
+                <button type="button" class="runway-btn" id="retry-webgpu-btn" hidden>重连 4DGS</button>
+                <a class="runway-btn" href="https://apps.apple.com/app/id6808203178" target="_blank" rel="noopener">App Store 完整真 3D 试衣</a>
+              </span>
             </div>
           </div>
 
           <div class="runway-tips">
-            <span>左键 / 单指拖拽：360° 环绕观察</span>
-            <span>滚轮 / 双指捏合：缩放刺绣细节</span>
-            <span>右键 / 双指拖动：平移视角 · 左下角按钮：播放 / 暂停走秀</span>
+            <span>单指 / 左键拖拽：360° 环绕模特与服装背面剪裁</span>
+            <span>双指捏合 / 滚轮 / 右键拖：贴近查看 2.2mm 妆面与布料花纹</span>
+            <span>底部「妆发特写 / 花裙细节」支持一键平滑推镜</span>
           </div>
         </div>
       </section>
@@ -275,27 +548,27 @@
       <section style="background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
         <div class="wrap">
           <p class="kicker">实测编码指标</p>
-          <h2>轻到秒开，依然还原五官、发丝与碎花</h2>
-          <p class="section-lead">以下数字全部来自穿好衣默认亚洲形象（银白丸子头 + 碎花层叠裙）64 帧实测导出与往返无损校验（<code>roundtrip_all_ok: true</code>）。</p>
+          <h2>首段仅 1.26 MB 秒开起播，五官发丝依然细腻</h2>
+          <p class="section-lead">以下数字全部来自新版穿好衣默认亚洲形象（多姿态 T 台编排 64 帧 @ 20 fps）实测导出与往返无损校验（<code>roundtrip_all_ok: true</code>）。</p>
           <div class="stats">
             <div class="stat">
-              <div class="v">6.60 MB</div>
-              <div class="k">64 帧完整 <code>.falt</code> 体积（2 段流：3.47 MB + 3.13 MB，19.81 Mbit/s）</div>
+              <div class="v">4.58 MB</div>
+              <div class="k">64 帧完整 <code>.falt</code> 体积（4 段渐进流：首段 1.26 MB 起播，11.46 Mbit/s）</div>
             </div>
             <div class="stat">
-              <div class="v">93,854</div>
-              <div class="k">分层 4D 高斯粒子数（脸部 2.2mm 加密，轨迹拟合均方误差 1.06 mm）</div>
+              <div class="v">73,415</div>
+              <div class="k">分层 4D 高斯粒子数（脸部 2.2mm 加密，轨迹拟合均方误差 1.41 mm）</div>
             </div>
             <div class="stat">
-              <div class="v">50.9×</div>
-              <div class="k">相比 64 帧未压缩 SH0 PLY（336.37 MB）压缩比率（节省 98.0% 带宽）</div>
+              <div class="v">57.4×</div>
+              <div class="k">相比 64 帧未压缩 SH0 PLY（263.12 MB）压缩比率（节省 98.3% 带宽）</div>
             </div>
           </div>
 
           <div class="runway-note-box">
             <h3>网页 4DGS 秀场 vs. 手机端真 3D 实时试衣</h3>
             <p>
-              本页展示的 Faltwerk 4DGS 适合在网页端免安装极速流式播控单套预设造型回放；而在穿好衣 iOS / Android 客户端中，依然由端上
+              本页展示的 Faltwerk 4DGS 适合在网页端免安装极速流式播控单套高定造型的多角度走秀；而在穿好衣 iOS / Android 客户端中，依然由端上
               Filament PBR 骨骼网格实时驱动：可随时自由捏脸调体型、叠穿上衣/裙装/外套、把实拍布料贴上模型。两者互补，且同样坚持数据不上传。
             </p>
             <p style="margin-top: 10px; font-size: 13px;">
@@ -332,14 +605,115 @@
         try { localStorage.setItem("theme", next); } catch (err) {}
       });
 
-      (async function initRunway() {
+      (function initRunwayStage() {
         var statusEl = document.getElementById("stage-status");
         var dotEl = document.getElementById("gpu-dot");
         var vpEl = document.getElementById("runway-viewport");
-        var posterEl = document.getElementById("runway-poster");
+        var posterLayer = document.getElementById("poster-layer");
+        var posterImg = document.getElementById("runway-poster");
+        var fbCanvas = document.getElementById("fallback-canvas");
+        var streamPill = document.getElementById("stream-pill");
+        var streamLabel = document.getElementById("stream-label");
+        var streamFill = document.getElementById("stream-fill");
         var fallbackEl = document.getElementById("fallback-note");
+        var fallbackReasonEl = document.getElementById("fallback-reason");
+        var retryBtn = document.getElementById("retry-webgpu-btn");
         var fsBtn = document.getElementById("fullscreen-btn");
+        var telemetryBtn = document.getElementById("telemetry-btn");
+        var telemetryBar = document.getElementById("telemetry-bar");
         var stageEl = document.getElementById("runway-stage");
+        var playBtn = document.getElementById("play-toggle-btn");
+        var slowBtn = document.getElementById("slow-toggle-btn");
+        var orbitBtn = document.getElementById("orbit-toggle-btn");
+        var presetBtns = Array.prototype.slice.call(document.querySelectorAll("[data-preset]"));
+        var moodBtns = Array.prototype.slice.call(document.querySelectorAll("[data-mood]"));
+
+        var activeFrame = null;
+        var isLive = false;
+        var isPlaying = true;
+        var isSlow = false;
+        var isAutoOrbit = false;
+        var currentPreset = "runway";
+        var sheetReady = false;
+        var sheetImg = null;
+        var fbYaw = 0; // 0..8 continuous angle for 8-tile fallback sheet
+        var fbZoom = 1.0;
+        var fbPanY = 0.0;
+        var fbDragging = false;
+        var fbDragX = 0;
+        var fbRaf = null;
+        var lastFbNow = 0;
+        var readyTimeout = null;
+
+        function setPresetButtons(preset) {
+          currentPreset = preset;
+          presetBtns.forEach(function (btn) {
+            btn.classList.toggle("is-active", btn.getAttribute("data-preset") === preset);
+          });
+        }
+
+        function postCmd(cmd) {
+          if (activeFrame && activeFrame.contentWindow) {
+            activeFrame.contentWindow.postMessage(Object.assign({ type: "p5:cmd" }, cmd), "*");
+          }
+        }
+
+        moodBtns.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var m = btn.getAttribute("data-mood") || "champagne";
+            vpEl.setAttribute("data-mood", m);
+            moodBtns.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+          });
+        });
+
+        presetBtns.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var p = btn.getAttribute("data-preset") || "runway";
+            isAutoOrbit = false;
+            orbitBtn.classList.remove("is-active");
+            setPresetButtons(p);
+            if (isLive) {
+              postCmd({ preset: p, autoOrbit: false });
+            } else {
+              if (p === "runway") { fbYaw = 0; fbZoom = 1.0; fbPanY = 0.0; }
+              else if (p === "face") { fbYaw = 0; fbZoom = 2.05; fbPanY = 0.34; }
+              else if (p === "dress") { fbYaw = 0.3; fbZoom = 1.55; fbPanY = -0.02; }
+              else if (p === "back") { fbYaw = 4.0; fbZoom = 1.05; fbPanY = 0.0; }
+              drawFallbackFrame();
+            }
+          });
+        });
+
+        playBtn.addEventListener("click", function () {
+          isPlaying = !isPlaying;
+          playBtn.classList.toggle("is-active", isPlaying);
+          if (isLive) {
+            postCmd({ playing: isPlaying });
+          } else {
+            isAutoOrbit = isPlaying && sheetReady;
+            if (!isPlaying) lastFbNow = 0;
+          }
+        });
+
+        slowBtn.addEventListener("click", function () {
+          isSlow = !isSlow;
+          slowBtn.classList.toggle("is-active", isSlow);
+          if (isLive) postCmd({ playRate: isSlow ? 0.5 : 1.0 });
+        });
+
+        orbitBtn.addEventListener("click", function () {
+          isAutoOrbit = !isAutoOrbit;
+          orbitBtn.classList.toggle("is-active", isAutoOrbit);
+          if (isLive) {
+            postCmd({ autoOrbit: isAutoOrbit });
+          }
+        });
+
+        telemetryBtn.addEventListener("click", function () {
+          var open = telemetryBar.hidden;
+          telemetryBar.hidden = !open;
+          telemetryBtn.setAttribute("aria-expanded", open ? "true" : "false");
+        });
 
         fsBtn.addEventListener("click", function () {
           if (document.fullscreenElement) {
@@ -349,40 +723,178 @@
           }
         });
 
-        function showFallback(reason) {
-          dotEl.style.background = "#e88ca0";
-          dotEl.style.boxShadow = "none";
+        function drawFallbackFrame() {
+          if (!sheetReady || !sheetImg || isLive) return;
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+          var w = Math.max(1, Math.round(posterLayer.clientWidth * dpr));
+          var h = Math.max(1, Math.round(posterLayer.clientHeight * dpr));
+          if (fbCanvas.width !== w || fbCanvas.height !== h) {
+            fbCanvas.width = w;
+            fbCanvas.height = h;
+          }
+          var ctx = fbCanvas.getContext("2d");
+          if (!ctx) return;
+          ctx.clearRect(0, 0, w, h);
+          var idx = ((Math.round(fbYaw) % 8) + 8) % 8;
+          var col = idx % 4;
+          var row = Math.floor(idx / 4);
+          var cellW = sheetImg.naturalWidth / 4;
+          var cellH = sheetImg.naturalHeight / 2;
+          var baseScale = Math.min(w / cellW, h / cellH);
+          var dw = cellW * baseScale * fbZoom;
+          var dh = cellH * baseScale * fbZoom;
+          var dx = (w - dw) * 0.5;
+          var dy = (h - dh) * 0.5 + dh * fbPanY * 0.5;
+          ctx.drawImage(sheetImg, col * cellW, row * cellH, cellW, cellH, dx, dy, dw, dh);
+        }
+
+        function tickFallback(now) {
+          if (isLive) { fbRaf = null; return; }
+          var dt = lastFbNow ? Math.min(0.1, (now - lastFbNow) / 1000) : 0;
+          lastFbNow = now;
+          if (sheetReady && !fbDragging && isAutoOrbit && isPlaying) {
+            fbYaw = (fbYaw + dt * (isSlow ? 0.65 : 1.35)) % 8;
+            drawFallbackFrame();
+          }
+          fbRaf = requestAnimationFrame(tickFallback);
+        }
+
+        function startInteractiveSheet(allowAutoRotate) {
+          if (sheetImg) return;
+          sheetImg = new Image();
+          sheetImg.onload = function () {
+            sheetReady = true;
+            fbCanvas.hidden = false;
+            posterImg.hidden = true;
+            if (allowAutoRotate && isPlaying) {
+              isAutoOrbit = true;
+              orbitBtn.classList.add("is-active");
+            }
+            drawFallbackFrame();
+            if (!fbRaf && !isLive) fbRaf = requestAnimationFrame(tickFallback);
+          };
+          sheetImg.src = "runway4d/preview_sheet.jpg";
+        }
+
+        posterLayer.addEventListener("pointerdown", function (e) {
+          if (isLive) return;
+          fbDragging = true;
+          fbDragX = e.clientX;
+          isAutoOrbit = false;
+          orbitBtn.classList.remove("is-active");
+          if (posterLayer.setPointerCapture) posterLayer.setPointerCapture(e.pointerId);
+        });
+        posterLayer.addEventListener("pointerup", function () { fbDragging = false; });
+        posterLayer.addEventListener("pointercancel", function () { fbDragging = false; });
+        posterLayer.addEventListener("pointermove", function (e) {
+          if (!fbDragging || isLive || !sheetReady) return;
+          var dx = e.clientX - fbDragX;
+          fbDragX = e.clientX;
+          fbYaw = (fbYaw - dx * 0.025 + 800) % 8;
+          drawFallbackFrame();
+        });
+        window.addEventListener("resize", drawFallbackFrame);
+
+        function activateFallback(reason, canRetry) {
+          isLive = false;
+          if (readyTimeout) { clearTimeout(readyTimeout); readyTimeout = null; }
+          if (activeFrame) { activeFrame.remove(); activeFrame = null; }
+          posterLayer.classList.remove("is-hidden");
+          streamPill.hidden = true;
+          dotEl.classList.remove("is-live");
+          dotEl.classList.add("is-fallback");
           statusEl.textContent = reason;
           fallbackEl.hidden = false;
+          retryBtn.hidden = !canRetry;
+          telemetryBar.textContent = canRetry
+            ? "WebGPU 4DGS 流未响应，当前由轻量 8 视角舞台承接（点击右侧可重试）。"
+            : "轻量 8 视角舞台运行中（未占用 WebGPU 管线）。";
+          startInteractiveSheet(true);
         }
 
-        if (!("gpu" in navigator) || !navigator.gpu) {
-          showFallback("未检测到 WebGPU 支持 · 展示高精渲染静态图");
-          return;
-        }
+        window.addEventListener("message", function (e) {
+          var d = e.data;
+          if (!d || typeof d !== "object" || !activeFrame || e.source !== activeFrame.contentWindow) return;
+          if (d.type === "p5:progress") {
+            if (d.seq === 0 && d.total > 0) {
+              var pct = Math.max(4, Math.min(99, d.pct || Math.round((d.loaded / d.total) * 100)));
+              streamFill.style.width = pct + "%";
+              streamLabel.textContent = "加载 4D 秀场 " + pct + "% (" + (d.loaded / 1048576).toFixed(1) + "/" + (d.total / 1048576).toFixed(1) + " MB)";
+              statusEl.textContent = "正在流式载入首段 .falt · " + pct + "%";
+            }
+          } else if (d.type === "p5:ready") {
+            if (readyTimeout) { clearTimeout(readyTimeout); readyTimeout = null; }
+            isLive = true;
+            if (fbRaf) { cancelAnimationFrame(fbRaf); fbRaf = null; }
+            streamPill.hidden = true;
+            fallbackEl.hidden = true;
+            posterLayer.classList.add("is-hidden");
+            activeFrame.classList.add("is-live");
+            dotEl.classList.remove("is-fallback");
+            dotEl.classList.add("is-live");
+            statusEl.textContent = "WebGPU 实时秀场 · 73,415 4DGS 粒子（首段 1.26 MB）";
+          } else if (d.type === "p5:state") {
+            var gpuPart = d.gpuMs != null ? " · GPU " + Number(d.gpuMs).toFixed(2) + " ms" : "";
+            telemetryBar.textContent = d.fps + " fps · 第 " + d.section + " 段 t=" + d.t + " · " + d.splats + " 粒子 (" + d.visible + " 可见)" + gpuPart + " · " + d.mib + " MiB";
+          } else if (d.type === "p5:error") {
+            activateFallback("4DGS 加载受限 · 已切至 8 视角轻量互动秀场", true);
+          }
+        });
 
-        try {
-          var adapter = await Promise.race([
-            navigator.gpu.requestAdapter({ powerPreference: "high-performance" }),
-            new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 4000); })
-          ]);
-          if (!adapter) {
-            showFallback("GPU 适配器不可用 · 展示高精渲染静态图");
+        async function launchWebGPU() {
+          fallbackEl.hidden = true;
+          streamPill.hidden = false;
+          streamFill.style.width = "8%";
+          streamLabel.textContent = "正在准备 WebGPU 舞台 …";
+          dotEl.classList.remove("is-live", "is-fallback");
+          statusEl.textContent = "正在初始化 WebGPU 秀场 …";
+          startInteractiveSheet(false);
+
+          if (!("gpu" in navigator) || !navigator.gpu) {
+            activateFallback("8 视角轻量互动秀场 · 当前浏览器未启用 WebGPU", false);
             return;
           }
-          var frame = document.createElement("iframe");
-          frame.className = "runway-iframe";
-          frame.title = "穿好衣 4DGS 默认形象互动走秀";
-          frame.src = "runway4d/viewer.html?bg=100e0c";
-          frame.allow = "fullscreen";
-          frame.addEventListener("load", function () {
-            frame.classList.add("is-live");
-            if (posterEl) posterEl.hidden = true;
-            statusEl.textContent = "WebGPU 实时播放中 · 93,854 4DGS 粒子（6.60 MB）";
+
+          try {
+            var adapter = await Promise.race([
+              navigator.gpu.requestAdapter({ powerPreference: "high-performance" }),
+              new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 4000); })
+            ]);
+            if (!adapter) {
+              activateFallback("8 视角轻量互动秀场 · 未检测到可用 GPU 适配器", false);
+              return;
+            }
+            if (activeFrame) activeFrame.remove();
+            var frame = document.createElement("iframe");
+            frame.className = "runway-iframe";
+            frame.title = "穿好衣 4DGS 默认形象互动走秀";
+            frame.src = "runway4d/viewer.html?bg=transparent&embed=1";
+            frame.allow = "fullscreen";
+            activeFrame = frame;
+            vpEl.appendChild(frame);
+
+            readyTimeout = setTimeout(function () {
+              if (!isLive) {
+                fallbackReasonEl.textContent = "当前网络拉取 4DGS 流超时（GitHub Pages 跨境带宽波动），已先为您切至 8 视角轻量互动舞台；也可点击右侧重连实时 WebGPU。";
+                activateFallback("8 视角轻量互动秀场 · 网络超时自动保底", true);
+              }
+            }, 22000);
+          } catch (err) {
+            activateFallback("8 视角轻量互动秀场 · WebGPU 初始化异常", true);
+          }
+        }
+
+        retryBtn.addEventListener("click", function () {
+          launchWebGPU();
+        });
+
+        // Defer WebGPU initialization until after first frame paint so browser navigation never blocks or spins unnecessarily
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", function () {
+            requestAnimationFrame(function () { setTimeout(launchWebGPU, 60); });
           });
-          vpEl.appendChild(frame);
-        } catch (err) {
-          showFallback("WebGPU 初始化失败 · 已回退静态图");
+        } else {
+          requestAnimationFrame(function () { setTimeout(launchWebGPU, 60); });
         }
       })();
     </script>

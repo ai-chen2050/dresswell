@@ -106,8 +106,8 @@
       "priority": 0.85,
       "changefreq": "monthly",
       "description": {
-        "zh-CN": "穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧转身走秀压缩为 6.60 MB（93,854 分层精度粒子、2 段 .falt），支持浏览器免安装 360° 环绕预览。",
-        "en": "DressWell's interactive WebGPU 4DGS runway showcase featuring the built-in signature Asian look (silver bun & floral tiered dress): 64 animated frames compressed into 6.60 MB (93,854 splats across 2 .falt sections) for instant 360° orbit playback."
+        "zh-CN": "穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧多姿态秀场动作压缩为 4.58 MB（4 段极速流、首段仅 1.26 MB、73,415 分层精度粒子），支持香槟/暮色秀场灯光、多机位特写、360° 自由环绕与无 WebGPU 端 8 视角轻量互动回退。",
+        "en": "DressWell's interactive WebGPU 4DGS runway showcase featuring the built-in signature Asian look (silver bun & floral tiered dress): 64 choreographed runway frames compressed into 4.58 MB (4 progressive sections starting at 1.26 MB, 73,415 splats) with stage spotlight moods, closeup camera presets, 360° orbit, and an instant 8-angle interactive fallback."
       }
     },
     {

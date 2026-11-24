@@ -392,7 +392,7 @@ var BLIT_WGSL = (
   /* wgsl */
   `
 @group(0) @binding(0) var src: texture_2d<f32>;
-@group(0) @binding(1) var<uniform> bg: vec4f;    // background behind the premultiplied splats
+@group(0) @binding(1) var<uniform> bg: vec4f;    // background behind the premultiplied splats (a=0 -> transparent)
 @vertex
 fn vs(@builtin(vertex_index) vi: u32) -> @builtin(position) vec4f {
   let p = vec2f(f32((vi << 1u) & 2u), f32(vi & 2u));
@@ -401,7 +401,9 @@ fn vs(@builtin(vertex_index) vi: u32) -> @builtin(position) vec4f {
 @fragment
 fn fs(@builtin(position) p: vec4f) -> @location(0) vec4f {
   let c = textureLoad(src, vec2i(p.xy), 0);
-  return vec4f(clamp(c.rgb + (1.0 - c.a) * bg.rgb, vec3f(0.0), vec3f(1.0)), 1.0);
+  let rgb = clamp(c.rgb + (1.0 - c.a) * bg.rgb * bg.a, vec3f(0.0), vec3f(1.0));
+  let a = clamp(c.a + (1.0 - c.a) * bg.a, 0.0, 1.0);
+  return vec4f(rgb, a);
 }
 `
 );
@@ -823,9 +825,9 @@ var Renderer = class {
       };
     }
   }
-  /** desktop canvas background, linear 0..1 (the splats are composited over it) */
-  setBackground(r, g, b) {
-    this.device.queue.writeBuffer(this.bgU, 0, new Float32Array([r, g, b, 1]));
+  /** desktop canvas background, linear 0..1 + alpha (a=0 keeps canvas transparent for CSS runway stage) */
+  setBackground(r, g, b, a = 1) {
+    this.device.queue.writeBuffer(this.bgU, 0, new Float32Array([r, g, b, a]));
   }
   /** grade applied by the XR eye blit; null turns it off */
   setGrade(g) {
@@ -1986,9 +1988,18 @@ function fillScenes(names, current) {
     location.search = q.toString();
   });
 }
+var postToParent = (msg) => {
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage(msg, "*");
+    }
+  } catch {
+  }
+};
 function fail(msg) {
   overlay.textContent = tr("Fehler: ", "Error: ") + msg;
   window.__p5 = { error: msg };
+  postToParent({ type: "p5:error", message: msg });
   throw new Error(msg);
 }
 function lookAt(pos, target, up) {
@@ -2013,13 +2024,18 @@ function camFromRt(R, t, fx, fy, cx, cy, w, h) {
   const campos = [0, 1, 2].map((c) => -(R[0][c] * t[0] + R[1][c] * t[1] + R[2][c] * t[2]));
   return { view, campos, fx, fy, cx, cy, width: w, height: h };
 }
-function orbitCam(sc, az, elev, distScale, w, h) {
+function orbitCam(sc, az, elev, distScale, panY, w, h) {
   const o = sc.orbit, up = o.up, f = o.front;
+  const center = [
+    o.center[0] + up[0] * panY,
+    o.center[1] + up[1] * panY,
+    o.center[2] + up[2] * panY
+  ];
   const s = [up[1] * f[2] - up[2] * f[1], up[2] * f[0] - up[0] * f[2], up[0] * f[1] - up[1] * f[0]];
   const ce = Math.cos(elev), se = Math.sin(elev), ca = Math.cos(az), sa = Math.sin(az);
   const d = o.dist * distScale;
-  const pos = [0, 1, 2].map((i) => o.center[i] + d * (ce * (ca * f[i] + sa * s[i]) + se * up[i]));
-  const R = lookAt(pos, o.center, up);
+  const pos = [0, 1, 2].map((i) => center[i] + d * (ce * (ca * f[i] + sa * s[i]) + se * up[i]));
+  const R = lookAt(pos, center, up);
   const t = R.map((row) => -(row[0] * pos[0] + row[1] * pos[1] + row[2] * pos[2]));
   const fy = 0.5 * h / Math.tan((Q.has("fovy") ? Number(Q.get("fovy")) : o.fovy_deg) * Math.PI / 360);
   return camFromRt(R, t, fy, fy, w / 2, h / 2, w, h);
@@ -2082,7 +2098,7 @@ async function main() {
   const ctx = canvas.getContext("webgpu");
   const format = navigator.gpu.getPreferredCanvasFormat();
   const offscreen = Q.get("offscreen") === "1";
-  if (!offscreen) ctx.configure({ device, format, alphaMode: "opaque" });
+  if (!offscreen) ctx.configure({ device, format, alphaMode: "premultiplied" });
   let offTex = null;
   const outTexture = () => {
     if (!offscreen) return ctx.getCurrentTexture();
@@ -2103,13 +2119,17 @@ async function main() {
   renderer.sortEvery = Math.max(1, Math.round(qnum("sortevery", 2, 1)));
   const bgInput = document.getElementById("bg");
   const setBg = (hex) => {
+    if (hex === "transparent" || hex === "none") {
+      renderer.setBackground(0, 0, 0, 0);
+      return;
+    }
     const m = /^#?([0-9a-f]{6})$/i.exec(hex);
     if (!m) return;
     const [r, g, b] = [0, 2, 4].map((i) => parseInt(m[1].slice(i, i + 2), 16) / 255);
-    renderer.setBackground(r, g, b);
+    renderer.setBackground(r, g, b, 1);
     bgInput.value = "#" + m[1].toLowerCase();
   };
-  setBg(Q.get("bg") ?? setting("bg") ?? "#000000");
+  setBg(Q.get("bg") ?? setting("bg") ?? "transparent");
   bgInput.addEventListener("input", () => {
     setBg(bgInput.value);
     saveSetting("bg", bgInput.value);
@@ -2119,7 +2139,9 @@ async function main() {
   const sceneName = Q.get("scene") ?? (saved && scenes.includes(saved) ? saved : scenes[0] ?? "scene.json");
   const sceneUrl = new URL(sceneName, location.href);
   fillScenes(scenes, sceneName);
-  const scene = await (await fetch(sceneUrl)).json();
+  const sceneResp = await fetch(sceneUrl);
+  if (!sceneResp.ok) fail(`scene fetch HTTP ${sceneResp.status}`);
+  const scene = await sceneResp.json();
   marks.scene_ms = performance.now();
   const nsec = scene.sections.length;
   const total = scene.sections.reduce((a, s) => a + s.nframes, 0);
@@ -2130,8 +2152,20 @@ async function main() {
   const requested = /* @__PURE__ */ new Set();
   const timings = [];
   const waiters = /* @__PURE__ */ new Map();
+  let loadPct = 0;
+  worker.onerror = (ev) => {
+    fail(`Worker error: ${ev.message || "failed to execute decoder"}`);
+  };
   worker.onmessage = (e) => {
-    const { seq, ps, timing, error } = e.data;
+    const { seq, ps, timing, error, progress, loaded, total: totalBytes } = e.data;
+    if (progress) {
+      if (seq === 0 && totalBytes > 0) {
+        loadPct = Math.min(99, Math.round(loaded / totalBytes * 100));
+        overlay.textContent = tr("Laden ", "Loading ") + `${loadPct}% \xB7 ${(loaded / 1048576).toFixed(1)} / ${(totalBytes / 1048576).toFixed(1)} MB`;
+      }
+      postToParent({ type: "p5:progress", seq, loaded, total: totalBytes, pct: loadPct });
+      return;
+    }
     if (error) fail(`${tr("Abschnitt", "Section")} ${seq}: ${error}`);
     timing.seq = seq;
     timing.index = seq % nsec;
@@ -2212,9 +2246,38 @@ async function main() {
   };
   const fixedT = Q.has("t") ? Number(Q.get("t")) : null;
   let playing = !Q.has("pause") && fixedT === null;
+  let playRate = Number(Q.get("speed") ?? 1) || 1;
+  let autoOrbit = Q.get("orbit") === "1";
+  let activePreset = Q.get("preset") ?? "runway";
   let playFrames = fixedT ?? 0;
   let lastNow = 0, stalls = 0, frames = 0, firstFrameDone = false, inflight = 0, gpuBound = 0;
-  let az = Number(Q.get("az") ?? 0) * Math.PI / 180, elev = scene.orbit.elev_deg * Math.PI / 180, distScale = Number(Q.get("zoom") ?? 1);
+  let az = Number(Q.get("az") ?? 0) * Math.PI / 180;
+  let elev = scene.orbit.elev_deg * Math.PI / 180;
+  let distScale = Number(Q.get("zoom") ?? 1);
+  let panY = Number(Q.get("pany") ?? 0);
+  let tAz = az, tElev = elev, tDistScale = distScale, tPanY = panY;
+  const presets = {
+    runway: { az: 0, elev: scene.orbit.elev_deg, zoom: 1, panY: 0 },
+    face: { az: -10, elev: 2, zoom: 0.34, panY: 0.64 },
+    dress: { az: 14, elev: -2, zoom: 0.56, panY: -0.02 },
+    back: { az: 174, elev: 5, zoom: 0.94, panY: 0.04 }
+  };
+  const applyPreset = (name) => {
+    const p = presets[name];
+    if (!p) return;
+    activePreset = name;
+    tAz = p.az * Math.PI / 180;
+    tElev = p.elev * Math.PI / 180;
+    tDistScale = p.zoom;
+    tPanY = p.panY;
+  };
+  if (Q.has("preset") && presets[activePreset]) {
+    applyPreset(activePreset);
+    az = tAz;
+    elev = tElev;
+    distScale = tDistScale;
+    panY = tPanY;
+  }
   const fpsWin = [];
   const testIdx = Q.has("testcam") ? Number(Q.get("testcam")) : -1;
   const currentCam = () => {
@@ -2222,7 +2285,7 @@ async function main() {
       const c = scene.testcams[testIdx];
       return camFromRt(c.R, c.t, c.fx, c.fy, c.cx, c.cy, c.w, c.h);
     }
-    return orbitCam(scene, az, elev, distScale, canvas.width, canvas.height);
+    return orbitCam(scene, az, elev, distScale, panY, canvas.width, canvas.height);
   };
   let rafOn = true;
   let hud = () => {
@@ -2239,17 +2302,26 @@ async function main() {
     if (gpuError) {
       overlay.textContent = tr("GPU-Fehler: ", "GPU error: ") + gpuError;
       window.__p5.error = gpuError;
+      postToParent({ type: "p5:error", message: gpuError });
       return;
     }
     if (!rafOn) return;
-    const dt = lastNow ? (now - lastNow) / 1e3 : 0;
+    const dt = lastNow ? Math.min(0.1, (now - lastNow) / 1e3) : 0;
     lastNow = now;
+    if (autoOrbit && !activePointers.size) {
+      tAz += dt * 0.34;
+    }
+    const camEase = dt > 0 ? 1 - Math.exp(-dt * 9) : 1;
+    az += (tAz - az) * camEase;
+    elev += (tElev - elev) * camEase;
+    distScale += (tDistScale - distScale) * camEase;
+    panY += (tPanY - panY) * camEase;
     let { seq, t } = locate(playFrames);
     housekeeping(seq);
     const g = ensureGpu(seq);
     if (g && inflight >= 2) {
       gpuBound++;
-      if (playing) playFrames += dt * scene.fps;
+      if (playing) playFrames += dt * scene.fps * playRate;
     } else if (g) {
       renderer.frame(g, t, currentCam(), outTexture(), { timing: true, readVisible: frames % 10 === 0 });
       inflight++;
@@ -2263,42 +2335,127 @@ async function main() {
         device.queue.onSubmittedWorkDone().then(() => {
           marks.first_frame_ms = performance.now();
           console.info(`p5: first frame done ${marks.first_frame_ms.toFixed(0)} ms`);
+          hud();
+          postToParent({
+            type: "p5:ready",
+            firstFrameMs: marks.first_frame_ms,
+            splats: g.ps.n,
+            fps: scene.fps,
+            totalFrames: total
+          });
         });
       }
-      if (playing) playFrames += dt * scene.fps;
+      if (playing) playFrames += dt * scene.fps * playRate;
     } else if (playing) {
       stalls++;
     }
     markFps(now);
     hud = () => {
       overlay.textContent = statusText(seq, t, g ? g.ps.n : 0);
+      postToParent({
+        type: "p5:state",
+        fps: fpsWin.length,
+        section: seq % nsec,
+        t: Number(t.toFixed(2)),
+        splats: g ? g.ps.n : 0,
+        visible: renderer.lastVisible,
+        gpuMs: renderer.lastTimings?.gpu_total ?? null,
+        mib: Number((renderer.gpuBytes() / 2 ** 20).toFixed(0)),
+        playing,
+        autoOrbit,
+        preset: activePreset,
+        playRate
+      });
     };
-    if (frames % 15 === 0) hud();
+    if (frames > 0 && frames % 15 === 0) hud();
     void t;
     void seq;
     requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
-  let drag = null;
+  const activePointers = /* @__PURE__ */ new Map();
+  let pinchDist = null;
+  let lastMidY = null;
+  const pointerPairDist = () => {
+    const pts = [...activePointers.values()];
+    if (pts.length < 2) return null;
+    return {
+      dist: Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y),
+      midY: 0.5 * (pts[0].y + pts[1].y)
+    };
+  };
   canvas.addEventListener("pointerdown", (e) => {
-    drag = { x: e.clientX, y: e.clientY };
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     canvas.setPointerCapture(e.pointerId);
+    autoOrbit = false;
+    activePreset = "custom";
+    const pair = pointerPairDist();
+    pinchDist = pair ? pair.dist : null;
+    lastMidY = pair ? pair.midY : null;
   });
-  canvas.addEventListener("pointerup", () => {
-    drag = null;
-  });
+  const endPointer = (e) => {
+    activePointers.delete(e.pointerId);
+    const pair = pointerPairDist();
+    pinchDist = pair ? pair.dist : null;
+    lastMidY = pair ? pair.midY : null;
+  };
+  canvas.addEventListener("pointerup", endPointer);
+  canvas.addEventListener("pointercancel", endPointer);
   canvas.addEventListener("pointermove", (e) => {
-    if (!drag) return;
-    az -= (e.clientX - drag.x) * 0.01;
-    elev = Math.max(-1.4, Math.min(1.4, elev + (e.clientY - drag.y) * 0.01));
-    drag = { x: e.clientX, y: e.clientY };
+    const prev = activePointers.get(e.pointerId);
+    if (!prev) return;
+    const dx = e.clientX - prev.x;
+    const dy = e.clientY - prev.y;
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (activePointers.size >= 2) {
+      const pair = pointerPairDist();
+      if (pair && pinchDist && pair.dist > 4) {
+        const ratio = pinchDist / pair.dist;
+        tDistScale = Math.max(0.26, Math.min(2.4, tDistScale * ratio));
+        distScale = tDistScale;
+        if (lastMidY !== null) {
+          tPanY = Math.max(-0.55, Math.min(0.85, tPanY + (pair.midY - lastMidY) * 2e-3));
+          panY = tPanY;
+        }
+        pinchDist = pair.dist;
+        lastMidY = pair.midY;
+      }
+      return;
+    }
+    if (e.buttons === 2 || e.shiftKey) {
+      tPanY = Math.max(-0.55, Math.min(0.85, tPanY + dy * 22e-4));
+      panY = tPanY;
+    } else {
+      tAz -= dx * 0.01;
+      tElev = Math.max(-1.35, Math.min(1.35, tElev + dy * 0.01));
+      az = tAz;
+      elev = tElev;
+    }
   });
+  canvas.addEventListener("contextmenu", (e) => e.preventDefault());
   canvas.addEventListener("wheel", (e) => {
-    distScale *= Math.exp(e.deltaY * 1e-3);
+    activePreset = "custom";
+    tDistScale = Math.max(0.26, Math.min(2.4, tDistScale * Math.exp(e.deltaY * 1e-3)));
+    distScale = tDistScale;
     e.preventDefault();
   }, { passive: false });
   document.getElementById("play").addEventListener("click", () => {
     playing = !playing;
+    hud();
+  });
+  window.addEventListener("message", (e) => {
+    const d = e.data;
+    if (!d || typeof d !== "object" || d.type !== "p5:cmd") return;
+    if (typeof d.preset === "string") applyPreset(d.preset);
+    if (typeof d.playing === "boolean") playing = d.playing;
+    if (typeof d.togglePlay === "boolean" && d.togglePlay) playing = !playing;
+    if (typeof d.autoOrbit === "boolean") {
+      autoOrbit = d.autoOrbit;
+      if (autoOrbit && activePreset !== "custom") activePreset = "orbit";
+    }
+    if (typeof d.playRate === "number" && d.playRate > 0) playRate = d.playRate;
+    if (typeof d.bg === "string") setBg(d.bg);
+    hud();
   });
   const xrScaleQ = qnum("xrscale", 1, 1);
   const xrRenderScale = Math.min(1, Math.max(0.3, qnum("xrrs", 0.7, 1)));
@@ -2512,9 +2669,23 @@ async function main() {
       canvas: [canvas.width, canvas.height]
     }),
     setView: (o) => {
-      if (o.az !== void 0) az = o.az * Math.PI / 180;
-      if (o.elev !== void 0) elev = o.elev * Math.PI / 180;
-      if (o.zoom !== void 0) distScale = o.zoom;
+      if (o.preset !== void 0) applyPreset(o.preset);
+      if (o.az !== void 0) {
+        tAz = o.az * Math.PI / 180;
+        az = tAz;
+      }
+      if (o.elev !== void 0) {
+        tElev = o.elev * Math.PI / 180;
+        elev = tElev;
+      }
+      if (o.zoom !== void 0) {
+        tDistScale = o.zoom;
+        distScale = tDistScale;
+      }
+      if (o.panY !== void 0) {
+        tPanY = o.panY;
+        panY = tPanY;
+      }
       if (o.t !== void 0) {
         let pf = Math.floor(playFrames / total) * total + o.t % total;
         if (pf < playFrames) pf += total;
@@ -2645,6 +2816,7 @@ async function main() {
           (o.az ?? 0) * Math.PI / 180,
           (o.elev ?? scene.orbit.elev_deg) * Math.PI / 180,
           o.zoom ?? 1,
+          0,
           canvas.width,
           canvas.height
         );

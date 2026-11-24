@@ -1,22 +1,32 @@
 {
- "fps": 24.0,
+ "fps": 20.0,
  "frames": 64,
  "sections": [
   {
    "url": "data/s0000.falt",
    "g0": 0,
-   "nframes": 32
+   "nframes": 16
   },
   {
    "url": "data/s0001.falt",
+   "g0": 16,
+   "nframes": 16
+  },
+  {
+   "url": "data/s0002.falt",
    "g0": 32,
-   "nframes": 32
+   "nframes": 16
+  },
+  {
+   "url": "data/s0003.falt",
+   "g0": 48,
+   "nframes": 16
   }
  ],
  "orbit": {
   "center": [
    0.0,
-   0.806,
+   0.84,
    0.0
   ],
   "up": [
@@ -29,8 +39,8 @@
    0.0,
    1.0
   ],
-  "dist": 2.78,
-  "elev_deg": 5.0,
+  "dist": 2.86,
+  "elev_deg": 4.0,
   "fovy_deg": 38.0
  },
  "testcams": []

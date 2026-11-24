@@ -1114,14 +1114,58 @@ function countReplicaP(sec, n) {
 // src/worker.ts
 var dec = new Decoder();
 var chain = Promise.resolve();
+async function fetchWithProgress(seq, url, timeoutMs = 24e3) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(new Error(`timeout after ${Math.round(timeoutMs / 1e3)}s`)), timeoutMs);
+  try {
+    const r = await fetch(url, { signal: ctrl.signal });
+    if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
+    const total = Number(r.headers.get("content-length") || 0);
+    if (!r.body) {
+      const b = new Uint8Array(await r.arrayBuffer());
+      self.postMessage({ seq, progress: true, loaded: b.length, total: total || b.length });
+      return { b, t: performance.now() };
+    }
+    const reader = r.body.getReader();
+    const chunks = [];
+    let loaded = 0;
+    let lastReport = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (value) {
+        chunks.push(value);
+        loaded += value.byteLength;
+        const now = performance.now();
+        if (now - lastReport > 75 || total > 0 && loaded >= total) {
+          lastReport = now;
+          self.postMessage({ seq, progress: true, loaded, total });
+        }
+      }
+    }
+    const out = new Uint8Array(loaded);
+    let offset = 0;
+    for (const c of chunks) {
+      out.set(c, offset);
+      offset += c.byteLength;
+    }
+    self.postMessage({ seq, progress: true, loaded, total: total || loaded });
+    return { b: out, t: performance.now() };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+async function fetchWithRetry(seq, url) {
+  try {
+    return await fetchWithProgress(seq, url, 22e3);
+  } catch (err) {
+    return await fetchWithProgress(seq, url, 25e3);
+  }
+}
 self.onmessage = (e) => {
   const job = e.data;
   const tq = performance.now();
-  const fetched = job.buf ? Promise.resolve({ b: new Uint8Array(job.buf), t: tq }) : fetch(job.url).then(async (r) => {
-    if (!r.ok) throw new Error(`${job.url}: HTTP ${r.status}`);
-    const b = new Uint8Array(await r.arrayBuffer());
-    return { b, t: performance.now() };
-  });
+  const fetched = job.buf ? Promise.resolve({ b: new Uint8Array(job.buf), t: tq }) : fetchWithRetry(job.seq, job.url);
   chain = chain.then(async () => {
     try {
       const { b, t: tf } = await fetched;
