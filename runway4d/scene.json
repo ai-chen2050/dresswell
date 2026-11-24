@@ -2,43 +2,19 @@
  "fps": 20.0,
  "frames": 64,
  "sections": [
-  {
-   "url": "data/s0000.falt",
-   "g0": 0,
-   "nframes": 16
-  },
-  {
-   "url": "data/s0001.falt",
-   "g0": 16,
-   "nframes": 16
-  },
-  {
-   "url": "data/s0002.falt",
-   "g0": 32,
-   "nframes": 16
-  },
-  {
-   "url": "data/s0003.falt",
-   "g0": 48,
-   "nframes": 16
-  }
+  { "url": "data/s0000.falt", "g0": 0,  "nframes": 8 },
+  { "url": "data/s0001.falt", "g0": 8,  "nframes": 8 },
+  { "url": "data/s0002.falt", "g0": 16, "nframes": 8 },
+  { "url": "data/s0003.falt", "g0": 24, "nframes": 8 },
+  { "url": "data/s0004.falt", "g0": 32, "nframes": 8 },
+  { "url": "data/s0005.falt", "g0": 40, "nframes": 8 },
+  { "url": "data/s0006.falt", "g0": 48, "nframes": 8 },
+  { "url": "data/s0007.falt", "g0": 56, "nframes": 8 }
  ],
  "orbit": {
-  "center": [
-   0.0,
-   0.84,
-   0.0
-  ],
-  "up": [
-   0.0,
-   1.0,
-   0.0
-  ],
-  "front": [
-   0.0,
-   0.0,
-   1.0
-  ],
+  "center": [0.0, 0.84, 0.0],
+  "up": [0.0, 1.0, 0.0],
+  "front": [0.0, 0.0, 1.0],
   "dist": 2.86,
   "elev_deg": 4.0,
   "fovy_deg": 38.0

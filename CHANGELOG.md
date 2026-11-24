@@ -6,9 +6,9 @@
 
 ## 2026-11-25
 
-- **全面重制 `runway4d` 高定秀场体验、首段 1.26 MB 渐进流式加载与无 WebGPU 8 视角互动舞台 (`runway4d.html`, `runway4d.en.html`, `runway4d/{viewer.html,main.js,worker.js,scene.json,poster.jpg,preview_sheet.jpg,data/s0000..s0003.falt}`, `site.config.json`)**:
-  - **解决「一直在转圈 / 长时间黑屏等待」根因**：修复原先 `iframe.onload` 在首帧 `.falt` 尚未下载完时提前隐藏 `poster.jpg` 导致长时间黑屏 `0 splats` 假就绪的 bug；改为由 `worker.ts` 通过 `ReadableStream` 汇报实时字节加载进度（带 22s/25s 超时自动重试与 `worker.onerror` 异常捕获），延迟至首帧 `device.queue.onSubmittedWorkDone()` 真正提交像素回传 `p5:ready` 后再平滑淡入透明画布，同时将首屏脚本启动延后到首帧绘制之后；
-  - **分段体积与起播速度大幅优化（`3.47 MB → 1.26 MB`，`6.60 MB → 4.58 MB`）**：将 64 帧 4DGS 流改为 `4` 段 `L=16 / K=5` 渐进编码（`73,415` 粒子，`20 fps`，`11.46 Mbit/s`，轨迹均方误差 `1.41 mm`，`roundtrip_all_ok: true`，较 `263.12 MB` SH0 PLY 压缩 `57.4×`），首段 `s0000.falt` 从 `3,470,689 B` 降至 `1,260,217 B`；
+- **全面重制 `runway4d` 高定秀场体验、首段 0.94 MB 渐进流式加载与无 WebGPU 8 视角互动舞台 (`runway4d.html`, `runway4d.en.html`, `runway4d/{viewer.html,main.js,worker.js,scene.json,poster.jpg,preview_sheet.jpg,data/s0000..s0007.falt}`, `site.config.json`)**:
+  - **解决「一直在转圈 / 长时间黑屏等待」根因**：修复原先 `iframe.onload` 在首帧 `.falt` 尚未下载完时提前隐藏 `poster.jpg` 导致长时间黑屏 `0 splats` 假就绪的 bug；改为由 `worker.ts` 通过 `ReadableStream` 汇报实时字节加载进度（带 22s/25s 超时自动重试与 `worker.onerror` 异常捕获），延迟至首帧 `device.queue.onSubmittedWorkDone()` 真正提交像素回传 `p5:ready` 后再平滑淡入透明画布；同时在 `main.ts` 修复首帧未画前 `LOOKAHEAD=2` 并发抢占带宽问题，让第 0 段独占 100% 下载带宽后再预取后续分段，并修补 `.runway-poster-img[hidden]` 被 `display: block` 覆盖引发的双层重影/裁切 bug；
+  - **分段体积与起播速度大幅优化（`3.47 MB → 0.94 MB`，`6.60 MB → 5.74 MB`）**：将 64 帧 4DGS 流改为 `8` 段 `L=8 / K=3` 渐进编码（`73,415` 粒子，`20 fps`，`14.34 Mbit/s`，轨迹均方误差降至 `0.96 mm`，`roundtrip_all_ok: true`，较 `263.12 MB` SH0 PLY 压缩 `45.8×` 节省 `97.8%` 带宽），首段 `s0000.falt` 从 `3,470,689 B` 降至 **`940,335 B`（`0.94 MB`）**；
   - **告别「木桩原地转圈」，上线多姿态秀场编排与透明 WebGPU 追光舞台**：升级 `Faltwerk` 着色器 `BLIT_WGSL` 与 `alphaMode: "premultiplied"` 支持透明画布直透，搭配「香槟追光 / 暮色银蓝 / 极简黑棚」3 组舞台灯光、镜面 T 台地坪与浮尘散景、4 组平滑推镜机位预设（`T台全景`、`妆发特写`、`花裙细节`、`露背剪裁`）、`0.5×` 慢赏与可选 `360° 环拍`，并在无 WebGPU 端（微信/iOS Safari）或拉流超时下无缝启用 `preview_sheet.jpg`（`97 KB`）8 视角交互舞台。
 
 ## 2026-11-24

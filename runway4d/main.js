@@ -2236,8 +2236,9 @@ async function main() {
   };
   const housekeeping = (seq) => {
     curSeq = seq;
-    for (let s = seq; s <= seq + LOOKAHEAD; s++) request(s);
-    ensureGpu(seq + 1, false);
+    const ahead = firstFrameDone ? LOOKAHEAD : 0;
+    for (let s = seq; s <= seq + ahead; s++) request(s);
+    if (firstFrameDone) ensureGpu(seq + 1, false);
     for (const [k, g] of gpu) if (k < seq) {
       if (!isResident(k, g)) renderer.release(g);
       gpu.delete(k);

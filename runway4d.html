@@ -9,7 +9,7 @@
     <!-- 下面这一段由 tools/gen_geo.py 从 site.config.json 生成，勿手改 -->
     <!-- GEO:AUTO START -->
 <title>4D 默认形象互动走秀（WebGPU 4DGS） · 穿好衣</title>
-<meta name="description" content="穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧多姿态秀场动作压缩为 4.58 MB（4 段极速流、首段仅 1.26 MB、73,415 分层精度粒子），支持香槟/暮色秀场灯光、多机位特写、360° 自由环绕与无 WebGPU 端 8 视角轻量互动回退。">
+<meta name="description" content="穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧多姿态秀场动作压缩为 5.74 MB（8 段极速渐进流、首段仅 0.94 MB、73,415 分层精度粒子），支持香槟/暮色秀场灯光、多机位特写、360° 自由环绕与无 WebGPU 端 8 视角轻量互动回退。">
 <meta name="keywords" content="虚拟试衣, 3D 试衣间, 数字衣橱, 穿搭搭配, 试衣 App, 离线, 隐私, 捏脸, 衣橱管理, AI 搭配师">
 <link rel="canonical" href="https://chuanhaoyi.top/runway4d.html">
 <link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/runway4d.html">
@@ -17,7 +17,7 @@
 <link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/runway4d.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="4D 默认形象互动走秀（WebGPU 4DGS） · 穿好衣">
-<meta property="og:description" content="穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧多姿态秀场动作压缩为 4.58 MB（4 段极速流、首段仅 1.26 MB、73,415 分层精度粒子），支持香槟/暮色秀场灯光、多机位特写、360° 自由环绕与无 WebGPU 端 8 视角轻量互动回退。">
+<meta property="og:description" content="穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧多姿态秀场动作压缩为 5.74 MB（8 段极速渐进流、首段仅 0.94 MB、73,415 分层精度粒子），支持香槟/暮色秀场灯光、多机位特写、360° 自由环绕与无 WebGPU 端 8 视角轻量互动回退。">
 <meta property="og:url" content="https://chuanhaoyi.top/runway4d.html">
 <meta property="og:image" content="https://chuanhaoyi.top/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -297,8 +297,8 @@
 
       /* Poster / 8-angle Fallback Runway Canvas */
       .runway-poster-layer {
-        position: absolute; inset: 0; z-index: 1;
-        display: grid; place-items: center;
+        position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;
+        overflow: hidden;
         transition: opacity .45s ease;
         cursor: grab; touch-action: none;
         -webkit-mask-image: radial-gradient(ellipse 68% 92% at 50% 48%, #000 58%, transparent 96%);
@@ -307,10 +307,13 @@
       .runway-poster-layer:active { cursor: grabbing; }
       .runway-poster-layer.is-hidden { opacity: 0; pointer-events: none; }
       .runway-poster-img {
+        position: absolute; inset: 0;
         width: 100%; height: 100%; object-fit: contain; display: block;
         mix-blend-mode: lighten;
         filter: contrast(1.03) saturate(1.05);
       }
+      .runway-poster-img[hidden],
+      .runway-fallback-canvas[hidden] { display: none !important; }
       .runway-fallback-canvas {
         position: absolute; inset: 0; width: 100%; height: 100%; display: block;
         mix-blend-mode: lighten;
@@ -441,11 +444,11 @@
     <header class="runway-hero">
       <div class="wrap">
         <p class="kicker">Faltwerk 4DGS · 高定秀场实验厅</p>
-        <h1>把默认亚洲形象 T 台大秀，<br />压进 <em>4.58 MB</em> 自由运镜</h1>
+        <h1>把默认亚洲形象 T 台大秀，<br />压进 <em>0.94 MB</em> 首段秒开</h1>
         <p class="lead">
           告别单调僵硬的原地转圈 —— 穿好衣默认造型（银白盘发丸子头 × 粉带碎花层叠吊带裙 × 亚洲精致五官）现在呈现完整的多姿态走秀编排：
           从单手轻扶粉腰带的T台定格、碎步换重、端庄转身到自然微笑眨眼；按面部 2.2mm / 发丝 4.2mm / 服饰 5.2mm 分层采样，
-          压缩为 4 段渐进 <code>.falt</code> 流（首段仅 <strong>1.26 MB</strong>），支持多机位特写、灯光切换与非 WebGPU 端 8 视角轻量互动。
+          压缩为 8 段渐进 <code>.falt</code> 流（总计 <strong>5.74 MB</strong>，首段独占带宽仅 <strong>0.94 MB</strong>），支持多机位特写、灯光切换与非 WebGPU 端 8 视角轻量互动。
         </p>
       </div>
     </header>
@@ -548,20 +551,20 @@
       <section style="background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
         <div class="wrap">
           <p class="kicker">实测编码指标</p>
-          <h2>首段仅 1.26 MB 秒开起播，五官发丝依然细腻</h2>
+          <h2>首段仅 0.94 MB 秒开起播，五官发丝依然细腻</h2>
           <p class="section-lead">以下数字全部来自新版穿好衣默认亚洲形象（多姿态 T 台编排 64 帧 @ 20 fps）实测导出与往返无损校验（<code>roundtrip_all_ok: true</code>）。</p>
           <div class="stats">
             <div class="stat">
-              <div class="v">4.58 MB</div>
-              <div class="k">64 帧完整 <code>.falt</code> 体积（4 段渐进流：首段 1.26 MB 起播，11.46 Mbit/s）</div>
+              <div class="v">5.74 MB</div>
+              <div class="k">64 帧完整 <code>.falt</code> 体积（8 段渐进流：首段仅 0.94 MB 起播，14.34 Mbit/s）</div>
             </div>
             <div class="stat">
               <div class="v">73,415</div>
-              <div class="k">分层 4D 高斯粒子数（脸部 2.2mm 加密，轨迹拟合均方误差 1.41 mm）</div>
+              <div class="k">分层 4D 高斯粒子数（脸部 2.2mm 加密，轨迹拟合均方误差 0.96 mm）</div>
             </div>
             <div class="stat">
-              <div class="v">57.4×</div>
-              <div class="k">相比 64 帧未压缩 SH0 PLY（263.12 MB）压缩比率（节省 98.3% 带宽）</div>
+              <div class="v">45.8×</div>
+              <div class="k">相比 64 帧未压缩 SH0 PLY（263.12 MB）压缩比率（节省 97.8% 带宽）</div>
             </div>
           </div>
 
@@ -639,6 +642,9 @@
         var fbYaw = 0; // 0..8 continuous angle for 8-tile fallback sheet
         var fbZoom = 1.0;
         var fbPanY = 0.0;
+        var tFbYaw = 0;
+        var tFbZoom = 1.0;
+        var tFbPanY = 0.0;
         var fbDragging = false;
         var fbDragX = 0;
         var fbRaf = null;
@@ -675,10 +681,11 @@
             if (isLive) {
               postCmd({ preset: p, autoOrbit: false });
             } else {
-              if (p === "runway") { fbYaw = 0; fbZoom = 1.0; fbPanY = 0.0; }
-              else if (p === "face") { fbYaw = 0; fbZoom = 2.05; fbPanY = 0.34; }
-              else if (p === "dress") { fbYaw = 0.3; fbZoom = 1.55; fbPanY = -0.02; }
-              else if (p === "back") { fbYaw = 4.0; fbZoom = 1.05; fbPanY = 0.0; }
+              if (p === "runway") { tFbYaw = 0; tFbZoom = 1.0; tFbPanY = 0.0; }
+              else if (p === "face") { tFbYaw = 0; tFbZoom = 1.95; tFbPanY = 0.25; }
+              else if (p === "dress") { tFbYaw = 0.3; tFbZoom = 1.55; tFbPanY = -0.02; }
+              else if (p === "back") { tFbYaw = 4.0; tFbZoom = 1.0; tFbPanY = 0.0; }
+              fbYaw = tFbYaw; fbZoom = tFbZoom; fbPanY = tFbPanY;
               drawFallbackFrame();
             }
           });
@@ -832,7 +839,7 @@
             activeFrame.classList.add("is-live");
             dotEl.classList.remove("is-fallback");
             dotEl.classList.add("is-live");
-            statusEl.textContent = "WebGPU 实时秀场 · 73,415 4DGS 粒子（首段 1.26 MB）";
+            statusEl.textContent = "WebGPU 实时秀场 · 73,415 4DGS 粒子（首段 0.94 MB）";
           } else if (d.type === "p5:state") {
             var gpuPart = d.gpuMs != null ? " · GPU " + Number(d.gpuMs).toFixed(2) + " ms" : "";
             telemetryBar.textContent = d.fps + " fps · 第 " + d.section + " 段 t=" + d.t + " · " + d.splats + " 粒子 (" + d.visible + " 可见)" + gpuPart + " · " + d.mib + " MiB";
@@ -878,7 +885,7 @@
                 fallbackReasonEl.textContent = "当前网络拉取 4DGS 流超时（GitHub Pages 跨境带宽波动），已先为您切至 8 视角轻量互动舞台；也可点击右侧重连实时 WebGPU。";
                 activateFallback("8 视角轻量互动秀场 · 网络超时自动保底", true);
               }
-            }, 22000);
+            }, 34000);
           } catch (err) {
             activateFallback("8 视角轻量互动秀场 · WebGPU 初始化异常", true);
           }
