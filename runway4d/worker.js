@@ -1156,19 +1156,27 @@ async function fetchWithProgress(seq, url, timeoutMs = 24e3) {
   }
 }
 async function fetchWithRetry(seq, url) {
-  try {
-    return await fetchWithProgress(seq, url, 22e3);
-  } catch (err) {
-    return await fetchWithProgress(seq, url, 25e3);
+  const maxAttempts = seq === 0 ? 2 : 4;
+  let lastErr;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      const timeoutMs = attempt === 0 ? 22e3 : Math.min(4e4, 26e3 + attempt * 5e3);
+      return await fetchWithProgress(seq, url, timeoutMs);
+    } catch (err) {
+      lastErr = err;
+      if (attempt + 1 < maxAttempts) {
+        await new Promise((r) => setTimeout(r, 800 * (attempt + 1)));
+      }
+    }
   }
+  throw lastErr;
 }
 self.onmessage = (e) => {
   const job = e.data;
   const tq = performance.now();
-  const fetched = job.buf ? Promise.resolve({ b: new Uint8Array(job.buf), t: tq }) : fetchWithRetry(job.seq, job.url);
   chain = chain.then(async () => {
     try {
-      const { b, t: tf } = await fetched;
+      const { b, t: tf } = job.buf ? { b: new Uint8Array(job.buf), t: tq } : await fetchWithRetry(job.seq, job.url);
       const t0 = performance.now();
       const sec = dec.decode(b);
       const t1 = performance.now();

@@ -6,6 +6,9 @@
 
 ## 2026-11-25
 
+- **修复已就绪 WebGPU 秀场被后续分片超时强退回 2D 的问题 (`runway4d/{main.js,worker.js}`, `runway4d.html`, `runway4d.en.html`)**:
+  - 将 `worker.ts` 下载逻辑移入严格串行 `chain` 内（`attempt 0..3`、`22s → 40s` 退避重试），避免 `s0001..s0007` 预取排队期间并发抢占带宽并提前触发 25s 超时计时；
+  - 修复 `main.ts` 在 `firstFrameDone === true` 后因后续分片超时的 uncaught `fail()` 报错与 `p5:error` 误杀：改为保留 `lastRendered` 最后一帧并持续以 120 fps 响应旋转/缩放/机位预设，同时父页面仅在 `!isLive` 时降级 8 视角舞台。
 - **全面重制 `runway4d` 高定秀场体验、首段 0.94 MB 渐进流式加载与无 WebGPU 8 视角互动舞台 (`runway4d.html`, `runway4d.en.html`, `runway4d/{viewer.html,main.js,worker.js,scene.json,poster.jpg,preview_sheet.jpg,data/s0000..s0007.falt}`, `site.config.json`)**:
   - **解决「一直在转圈 / 长时间黑屏等待」根因**：修复原先 `iframe.onload` 在首帧 `.falt` 尚未下载完时提前隐藏 `poster.jpg` 导致长时间黑屏 `0 splats` 假就绪的 bug；改为由 `worker.ts` 通过 `ReadableStream` 汇报实时字节加载进度（带 22s/25s 超时自动重试与 `worker.onerror` 异常捕获），延迟至首帧 `device.queue.onSubmittedWorkDone()` 真正提交像素回传 `p5:ready` 后再平滑淡入透明画布；同时在 `main.ts` 修复首帧未画前 `LOOKAHEAD=2` 并发抢占带宽问题，让第 0 段独占 100% 下载带宽后再预取后续分段，并修补 `.runway-poster-img[hidden]` 被 `display: block` 覆盖引发的双层重影/裁切 bug；
   - **分段体积与起播速度大幅优化（`3.47 MB → 0.94 MB`，`6.60 MB → 5.74 MB`）**：将 64 帧 4DGS 流改为 `8` 段 `L=8 / K=3` 渐进编码（`73,415` 粒子，`20 fps`，`14.34 Mbit/s`，轨迹均方误差降至 `0.96 mm`，`roundtrip_all_ok: true`，较 `263.12 MB` SH0 PLY 压缩 `45.8×` 节省 `97.8%` 带宽），首段 `s0000.falt` 从 `3,470,689 B` 降至 **`940,335 B`（`0.94 MB`）**；

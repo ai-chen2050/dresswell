@@ -2166,7 +2166,15 @@ async function main() {
       postToParent({ type: "p5:progress", seq, loaded, total: totalBytes, pct: loadPct });
       return;
     }
-    if (error) fail(`${tr("Abschnitt", "Section")} ${seq}: ${error}`);
+    if (error) {
+      if (!firstFrameDone) {
+        fail(`${tr("Abschnitt", "Section")} ${seq}: ${error}`);
+      } else {
+        console.warn(`p5: section ${seq} stalled after live ready:`, error);
+        postToParent({ type: "p5:stall", seq, error });
+        return;
+      }
+    }
     timing.seq = seq;
     timing.index = seq % nsec;
     timing.recv_ms = performance.now();
@@ -2252,6 +2260,7 @@ async function main() {
   let activePreset = Q.get("preset") ?? "runway";
   let playFrames = fixedT ?? 0;
   let lastNow = 0, stalls = 0, frames = 0, firstFrameDone = false, inflight = 0, gpuBound = 0;
+  let lastRendered = null;
   let az = Number(Q.get("az") ?? 0) * Math.PI / 180;
   let elev = scene.orbit.elev_deg * Math.PI / 180;
   let distScale = Number(Q.get("zoom") ?? 1);
@@ -2325,6 +2334,7 @@ async function main() {
       if (playing) playFrames += dt * scene.fps * playRate;
     } else if (g) {
       renderer.frame(g, t, currentCam(), outTexture(), { timing: true, readVisible: frames % 10 === 0 });
+      lastRendered = { g, t, seq };
       inflight++;
       device.queue.onSubmittedWorkDone().then(() => {
         inflight--;
@@ -2347,18 +2357,29 @@ async function main() {
         });
       }
       if (playing) playFrames += dt * scene.fps * playRate;
+    } else if (lastRendered && inflight < 2) {
+      renderer.frame(lastRendered.g, lastRendered.t, currentCam(), outTexture(), { timing: true, readVisible: frames % 10 === 0 });
+      inflight++;
+      device.queue.onSubmittedWorkDone().then(() => {
+        inflight--;
+      });
+      frames++;
+      if (playing) stalls++;
     } else if (playing) {
       stalls++;
     }
     markFps(now);
     hud = () => {
-      overlay.textContent = statusText(seq, t, g ? g.ps.n : 0);
+      const shown = g ?? lastRendered?.g ?? null;
+      const shownSeq = g ? seq : lastRendered?.seq ?? seq;
+      const shownT = g ? t : lastRendered?.t ?? t;
+      overlay.textContent = statusText(shownSeq, shownT, shown ? shown.ps.n : 0);
       postToParent({
         type: "p5:state",
         fps: fpsWin.length,
-        section: seq % nsec,
-        t: Number(t.toFixed(2)),
-        splats: g ? g.ps.n : 0,
+        section: shownSeq % nsec,
+        t: Number(shownT.toFixed(2)),
+        splats: shown ? shown.ps.n : 0,
         visible: renderer.lastVisible,
         gpuMs: renderer.lastTimings?.gpu_total ?? null,
         mib: Number((renderer.gpuBytes() / 2 ** 20).toFixed(0)),

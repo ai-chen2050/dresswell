@@ -843,8 +843,16 @@
           } else if (d.type === "p5:state") {
             var gpuPart = d.gpuMs != null ? " · GPU " + Number(d.gpuMs).toFixed(2) + " ms" : "";
             telemetryBar.textContent = d.fps + " fps · 第 " + d.section + " 段 t=" + d.t + " · " + d.splats + " 粒子 (" + d.visible + " 可见)" + gpuPart + " · " + d.mib + " MiB";
+          } else if (d.type === "p5:stall") {
+            if (isLive) {
+              statusEl.textContent = "WebGPU 实时秀场 · 后续动作分片弱网缓冲中（可自由旋转缩放）";
+            }
           } else if (d.type === "p5:error") {
-            activateFallback("4DGS 加载受限 · 已切至 8 视角轻量互动秀场", true);
+            if (!isLive) {
+              activateFallback("4DGS 加载受限 · 已切至 8 视角轻量互动秀场", true);
+            } else {
+              statusEl.textContent = "WebGPU 实时秀场 · 后续分片弱网重试中（可自由旋转缩放）";
+            }
           }
         });
 

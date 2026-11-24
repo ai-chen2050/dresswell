@@ -836,8 +836,16 @@
           } else if (d.type === "p5:state") {
             var gpuPart = d.gpuMs != null ? " · GPU " + Number(d.gpuMs).toFixed(2) + " ms" : "";
             telemetryBar.textContent = d.fps + " fps · section " + d.section + " t=" + d.t + " · " + d.splats + " splats (" + d.visible + " visible)" + gpuPart + " · " + d.mib + " MiB";
+          } else if (d.type === "p5:stall") {
+            if (isLive) {
+              statusEl.textContent = "WebGPU 4DGS live · Buffering next section (3D orbit ready)";
+            }
           } else if (d.type === "p5:error") {
-            activateFallback("4DGS stream fallback · Interactive 8-angle runway active", true);
+            if (!isLive) {
+              activateFallback("4DGS stream fallback · Interactive 8-angle runway active", true);
+            } else {
+              statusEl.textContent = "WebGPU 4DGS live · Buffering next section (3D orbit ready)";
+            }
           }
         });
 
