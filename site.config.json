@@ -38,7 +38,7 @@
     "themeColor": "#2EBD85",
     "ga4": "G-1CQNQNPK1Y",
     "baidu": "b3a7b6fedcba22d39897693d6f716035",
-    "updated": "2026-11-18"
+    "updated": "2026-11-24"
   },
   "locales": {
     "//": "第一个是默认语言（对应 index.html，无后缀）；其余生成 index.<code>.html",
@@ -95,6 +95,19 @@
       "description": {
         "zh-CN": "穿好衣的开发日记：3D 试衣、端上重建、渲染与渠道适配这一路上的取舍和返工记录。",
         "en": "The DressWell devlog: trade-offs and rework from building 3D try-on, on-device reconstruction, rendering and store channels."
+      }
+    },
+    {
+      "file": "runway4d",
+      "title": {
+        "zh-CN": "4D 默认形象互动走秀（WebGPU 4DGS）",
+        "en": "4D Signature Look Interactive Runway (WebGPU 4DGS)"
+      },
+      "priority": 0.85,
+      "changefreq": "monthly",
+      "description": {
+        "zh-CN": "穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧转身走秀压缩为 6.60 MB（93,854 分层精度粒子、2 段 .falt），支持浏览器免安装 360° 环绕预览。",
+        "en": "DressWell's interactive WebGPU 4DGS runway showcase featuring the built-in signature Asian look (silver bun & floral tiered dress): 64 animated frames compressed into 6.60 MB (93,854 splats across 2 .falt sections) for instant 360° orbit playback."
       }
     },
     {

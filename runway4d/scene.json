@@ -1,0 +1,37 @@
+{
+ "fps": 24.0,
+ "frames": 64,
+ "sections": [
+  {
+   "url": "data/s0000.falt",
+   "g0": 0,
+   "nframes": 32
+  },
+  {
+   "url": "data/s0001.falt",
+   "g0": 32,
+   "nframes": 32
+  }
+ ],
+ "orbit": {
+  "center": [
+   0.0,
+   0.806,
+   0.0
+  ],
+  "up": [
+   0.0,
+   1.0,
+   0.0
+  ],
+  "front": [
+   0.0,
+   0.0,
+   1.0
+  ],
+  "dist": 2.78,
+  "elev_deg": 5.0,
+  "fovy_deg": 38.0
+ },
+ "testcams": []
+}

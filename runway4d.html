@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="icon.png" />
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- 下面这一段由 tools/gen_geo.py 从 site.config.json 生成，勿手改 -->
+    <!-- GEO:AUTO START -->
+<title>4D 默认形象互动走秀（WebGPU 4DGS） · 穿好衣</title>
+<meta name="description" content="穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧转身走秀压缩为 6.60 MB（93,854 分层精度粒子、2 段 .falt），支持浏览器免安装 360° 环绕预览。">
+<meta name="keywords" content="虚拟试衣, 3D 试衣间, 数字衣橱, 穿搭搭配, 试衣 App, 离线, 隐私, 捏脸, 衣橱管理, AI 搭配师">
+<link rel="canonical" href="https://chuanhaoyi.top/runway4d.html">
+<link rel="alternate" hreflang="zh-CN" href="https://chuanhaoyi.top/runway4d.html">
+<link rel="alternate" hreflang="en" href="https://chuanhaoyi.top/runway4d.en.html">
+<link rel="alternate" hreflang="x-default" href="https://chuanhaoyi.top/runway4d.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="4D 默认形象互动走秀（WebGPU 4DGS） · 穿好衣">
+<meta property="og:description" content="穿好衣默认亚洲形象（银白丸子头 × 碎花层叠裙）WebGPU 4DGS 流式互动走秀页：将 64 帧转身走秀压缩为 6.60 MB（93,854 分层精度粒子、2 段 .falt），支持浏览器免安装 360° 环绕预览。">
+<meta property="og:url" content="https://chuanhaoyi.top/runway4d.html">
+<meta property="og:image" content="https://chuanhaoyi.top/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2EBD85">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://chuanhaoyi.top/#product",
+      "name": "穿好衣",
+      "description": "穿好衣把你的身材和你真实的衣服重建成可以转着看的 3D：捏出自己的身形与五官，拍一张衣服照片就能穿到身上，外套、上衣、裙子自由叠穿。重建、渲染、换装全部在手机本地完成，衣柜和身材数据不上传。",
+      "url": "https://chuanhaoyi.top/",
+      "alternateName": [
+        "DressWell",
+        "穿好衣",
+        "ai-dress"
+      ],
+      "operatingSystem": "iOS, Android",
+      "applicationCategory": "LifestyleApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "CNY"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "chuanhaoyi",
+        "email": "blake.chen94@gmail.com"
+      },
+      "featureList": [
+        "真 3D：转着看，不是等一张图",
+        "真身材：告诉你合不合身，而不是把你 P 好看",
+        "拍一张，你的衣服进 3D 衣柜",
+        "真隐私：没有服务器，没有账号",
+        "把你的包扫进 3D（iPhone Pro）",
+        "搭配师跑在你自己的 Key 上"
+      ],
+      "installUrl": "https://apps.apple.com/app/id6808203178"
+    }
+  ]
+}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1CQNQNPK1Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-1CQNQNPK1Y');
+</script>
+<script>
+  window._hmt = window._hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?b3a7b6fedcba22d39897693d6f716035";
+    hm.async = true;
+    var s = document.getElementsByTagName("script")[0];
+    if (s && s.parentNode) s.parentNode.insertBefore(hm, s);
+    else document.head.appendChild(hm);
+  })();
+</script>
+<script>
+  (function(){
+    var lastPath = location.pathname + location.search + location.hash;
+    function trackPageView(){
+      var curPath = location.pathname + location.search + location.hash;
+      if (curPath === lastPath) return;
+      lastPath = curPath;
+      if (typeof window.gtag === "function") {
+        window.gtag('event', 'page_view', {
+          page_path: curPath,
+          page_location: location.href,
+          page_title: document.title
+        });
+      }
+      if (Array.isArray(window._hmt)) {
+        window._hmt.push(['_trackPageview', curPath]);
+      }
+    }
+    var origPush = history.pushState;
+    if (origPush) {
+      history.pushState = function(){
+        var ret = origPush.apply(this, arguments);
+        trackPageView();
+        return ret;
+      };
+    }
+    var origReplace = history.replaceState;
+    if (origReplace) {
+      history.replaceState = function(){
+        var ret = origReplace.apply(this, arguments);
+        trackPageView();
+        return ret;
+      };
+    }
+    window.addEventListener('popstate', trackPageView);
+    window.addEventListener('hashchange', trackPageView);
+  })();
+</script>
+<!-- GEO:AUTO END -->
+
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t === "dark" || t === "light")
+            document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      .runway-hero {
+        padding: 72px 0 44px;
+        background:
+          radial-gradient(110% 85% at 85% 0%, var(--accent-soft) 0%, transparent 56%),
+          linear-gradient(180deg, var(--bg2), var(--bg));
+        border-bottom: 1px solid var(--line);
+      }
+      .runway-hero h1 {
+        font-family: var(--serif); font-weight: 400;
+        font-size: clamp(34px, 5.4vw, 60px); line-height: 1.08;
+        letter-spacing: -.015em; margin-top: 16px;
+      }
+      .runway-hero .lead { margin-top: 16px; max-width: 62ch; }
+      .runway-stage-sec { padding: 48px 0 72px; }
+      .runway-stage {
+        border-radius: 18px; overflow: hidden;
+        border: 1px solid var(--line); background: #100e0c;
+        box-shadow: var(--shadow);
+      }
+      .runway-bar {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 12px; padding: 12px 18px;
+        background: rgba(25, 21, 18, 0.94); color: #f3ece3;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 13px; flex-wrap: wrap;
+      }
+      .runway-bar-title { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; }
+      .runway-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ed4a2; box-shadow: 0 0 10px rgba(78, 212, 162, 0.7); }
+      .runway-bar-actions { display: inline-flex; align-items: center; gap: 10px; }
+      .runway-btn {
+        appearance: none; border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.08); color: #f3ece3;
+        border-radius: 999px; padding: 5px 13px; font-size: 12px; font-weight: 600;
+        cursor: pointer; text-decoration: none;
+      }
+      .runway-btn:hover { background: #2ebd85; border-color: #2ebd85; color: #04241a; text-decoration: none; }
+      .runway-viewport {
+        position: relative; width: 100%; overflow: hidden;
+        height: clamp(460px, 68vh, 680px);
+        background: radial-gradient(circle at 50% 42%, #241e19 0%, #100e0c 72%);
+        display: grid; place-items: center;
+      }
+      .runway-poster {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%; object-fit: contain; display: block;
+      }
+      .runway-iframe {
+        position: absolute; inset: 0; width: 100%; height: 100%;
+        border: 0; opacity: 0; transition: opacity .35s ease;
+      }
+      .runway-iframe.is-live { opacity: 1; }
+      .runway-fallback-note {
+        padding: 14px 18px; font-size: 13.5px; color: #d8cfc3;
+        background: rgba(25, 21, 18, 0.96);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      }
+      .runway-fallback-note[hidden] { display: none; }
+      .runway-tips {
+        display: flex; flex-wrap: wrap; gap: 10px 22px;
+        margin-top: 18px; color: var(--sub); font-size: 13.5px;
+      }
+      .runway-note-box {
+        margin-top: 32px; padding: 24px 26px; border-radius: 14px;
+        border: 1px solid var(--line); background: var(--bg2);
+      }
+      .runway-note-box h3 { font-family: var(--serif); font-weight: 400; font-size: 22px; margin-bottom: 8px; }
+      .runway-note-box p { color: var(--sub); font-size: 15px; }
+      @media (max-width: 720px) {
+        .runway-viewport { height: clamp(390px, 64vh, 540px); }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="wrap">
+        <a class="brand" href="index.html"><img class="brand-mark" src="icon.png" alt="" width="28" height="28">穿好衣</a>
+        <span class="spacer"></span>
+        <a href="index.html#features" class="hide-sm">功能</a>
+        <a href="runway4d.html">4D 走秀</a>
+        <a href="geo.html" class="hide-sm">常见问题</a>
+        <a href="devlog.html" class="hide-sm">开发日记</a>
+        <a href="support.html">支持</a>
+        <a href="runway4d.en.html">EN</a>
+        <a href="#" id="theme-toggle" title="切换主题">◐</a>
+      </div>
+    </nav>
+
+    <header class="runway-hero">
+      <div class="wrap">
+        <p class="kicker">Faltwerk 4DGS · WebGPU 网页实验</p>
+        <h1>把默认高定形象秀场，<br />压进 <em>6.60 MB</em> 实时旋转</h1>
+        <p class="lead">
+          这是穿好衣官方默认造型（银白丸子头 × 碎花层叠裙 × 亚洲默认妆容与捏脸）的 WebGPU 4D 高斯溅射（4DGS）流式展示页：
+          按面部 2.2mm / 发丝 4.2mm / 服饰 5.2mm 分层采样并烘培工作室柔光，将 64 帧转身动画打包为 2 段 <code>.falt</code> 量化流，
+          直接在浏览器 GPU 实时解码播放与 360° 轨道交互，免下载 App 也能预览。
+        </p>
+      </div>
+    </header>
+
+    <main>
+      <section class="runway-stage-sec">
+        <div class="wrap">
+          <div class="runway-stage" id="runway-stage">
+            <div class="runway-bar">
+              <span class="runway-bar-title">
+                <span class="runway-dot" id="gpu-dot" aria-hidden="true"></span>
+                <span id="stage-status">正在检测浏览器 WebGPU 能力 …</span>
+              </span>
+              <div class="runway-bar-actions">
+                <button type="button" class="runway-btn" id="fullscreen-btn">全屏走秀</button>
+                <a class="runway-btn" href="index.html">返回首页</a>
+              </div>
+            </div>
+
+            <div class="runway-viewport" id="runway-viewport">
+              <img
+                class="runway-poster"
+                id="runway-poster"
+                src="runway4d/poster.jpg"
+                alt="穿好衣 默认亚洲形象 3D 造型秀场渲染预览图"
+                width="900"
+                height="1200"
+              />
+            </div>
+
+            <div class="runway-fallback-note" id="fallback-note" hidden>
+              <span>
+                当前浏览器未启用 WebGPU（推荐使用 Chrome 113+ / Edge 113+ / Safari 26+），已自动切换为静态高精摄影预览。
+              </span>
+              <a class="runway-btn" href="https://apps.apple.com/app/id6808203178" target="_blank" rel="noopener">App Store 体验完整试衣间</a>
+            </div>
+          </div>
+
+          <div class="runway-tips">
+            <span>左键 / 单指拖拽：360° 环绕观察</span>
+            <span>滚轮 / 双指捏合：缩放刺绣细节</span>
+            <span>右键 / 双指拖动：平移视角 · 左下角按钮：播放 / 暂停走秀</span>
+          </div>
+        </div>
+      </section>
+
+      <section style="background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+        <div class="wrap">
+          <p class="kicker">实测编码指标</p>
+          <h2>轻到秒开，依然还原五官、发丝与碎花</h2>
+          <p class="section-lead">以下数字全部来自穿好衣默认亚洲形象（银白丸子头 + 碎花层叠裙）64 帧实测导出与往返无损校验（<code>roundtrip_all_ok: true</code>）。</p>
+          <div class="stats">
+            <div class="stat">
+              <div class="v">6.60 MB</div>
+              <div class="k">64 帧完整 <code>.falt</code> 体积（2 段流：3.47 MB + 3.13 MB，19.81 Mbit/s）</div>
+            </div>
+            <div class="stat">
+              <div class="v">93,854</div>
+              <div class="k">分层 4D 高斯粒子数（脸部 2.2mm 加密，轨迹拟合均方误差 1.06 mm）</div>
+            </div>
+            <div class="stat">
+              <div class="v">50.9×</div>
+              <div class="k">相比 64 帧未压缩 SH0 PLY（336.37 MB）压缩比率（节省 98.0% 带宽）</div>
+            </div>
+          </div>
+
+          <div class="runway-note-box">
+            <h3>网页 4DGS 秀场 vs. 手机端真 3D 实时试衣</h3>
+            <p>
+              本页展示的 Faltwerk 4DGS 适合在网页端免安装极速流式播控单套预设造型回放；而在穿好衣 iOS / Android 客户端中，依然由端上
+              Filament PBR 骨骼网格实时驱动：可随时自由捏脸调体型、叠穿上衣/裙装/外套、把实拍布料贴上模型。两者互补，且同样坚持数据不上传。
+            </p>
+            <p style="margin-top: 10px; font-size: 13px;">
+              WebGPU 4DGS 解码与网格转高斯管线基于开源项目 <a href="https://github.com/edrethardo/Faltwerk" target="_blank" rel="noopener">Faltwerk</a>（MIT 许可证 · 查看 <a href="runway4d/LICENSE-Faltwerk.txt">LICENSE-Faltwerk.txt</a>）。
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <div class="fnav">
+          <a href="index.html">首页</a>
+          <a href="runway4d.html">4D 走秀</a>
+          <a href="geo.html">常见问题</a>
+          <a href="devlog.html">开发日记</a>
+          <a href="support.html">技术支持</a>
+          <a href="privacy.html">隐私政策</a>
+          <a href="runway4d.en.html">English</a>
+        </div>
+        <p class="fine">
+          © chuanhaoyi · DressWell（穿好衣）· 联系：<a href="mailto:blake.chen94@gmail.com">blake.chen94@gmail.com</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("theme-toggle").addEventListener("click", function (e) {
+        e.preventDefault();
+        var cur = document.documentElement.getAttribute("data-theme");
+        var next = cur === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        try { localStorage.setItem("theme", next); } catch (err) {}
+      });
+
+      (async function initRunway() {
+        var statusEl = document.getElementById("stage-status");
+        var dotEl = document.getElementById("gpu-dot");
+        var vpEl = document.getElementById("runway-viewport");
+        var posterEl = document.getElementById("runway-poster");
+        var fallbackEl = document.getElementById("fallback-note");
+        var fsBtn = document.getElementById("fullscreen-btn");
+        var stageEl = document.getElementById("runway-stage");
+
+        fsBtn.addEventListener("click", function () {
+          if (document.fullscreenElement) {
+            document.exitFullscreen().catch(function () {});
+          } else if (stageEl.requestFullscreen) {
+            stageEl.requestFullscreen().catch(function () {});
+          }
+        });
+
+        function showFallback(reason) {
+          dotEl.style.background = "#e88ca0";
+          dotEl.style.boxShadow = "none";
+          statusEl.textContent = reason;
+          fallbackEl.hidden = false;
+        }
+
+        if (!("gpu" in navigator) || !navigator.gpu) {
+          showFallback("未检测到 WebGPU 支持 · 展示高精渲染静态图");
+          return;
+        }
+
+        try {
+          var adapter = await Promise.race([
+            navigator.gpu.requestAdapter({ powerPreference: "high-performance" }),
+            new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 4000); })
+          ]);
+          if (!adapter) {
+            showFallback("GPU 适配器不可用 · 展示高精渲染静态图");
+            return;
+          }
+          var frame = document.createElement("iframe");
+          frame.className = "runway-iframe";
+          frame.title = "穿好衣 4DGS 默认形象互动走秀";
+          frame.src = "runway4d/viewer.html?bg=100e0c";
+          frame.allow = "fullscreen";
+          frame.addEventListener("load", function () {
+            frame.classList.add("is-live");
+            if (posterEl) posterEl.hidden = true;
+            statusEl.textContent = "WebGPU 实时播放中 · 93,854 4DGS 粒子（6.60 MB）";
+          });
+          vpEl.appendChild(frame);
+        } catch (err) {
+          showFallback("WebGPU 初始化失败 · 已回退静态图");
+        }
+      })();
+    </script>
+  </body>
+</html>

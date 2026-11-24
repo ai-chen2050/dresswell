@@ -39,6 +39,8 @@
 - [AI 知识库与常见问题 (中文)](https://chuanhaoyi.top/geo.html)
 - [AI Knowledge Base & FAQ (English)](https://chuanhaoyi.top/geo.en.html)
 - [开发日记 (中文)](https://chuanhaoyi.top/devlog.html)
+- [4D 默认形象互动走秀（WebGPU 4DGS） (中文)](https://chuanhaoyi.top/runway4d.html)
+- [4D Signature Look Interactive Runway (WebGPU 4DGS) (English)](https://chuanhaoyi.top/runway4d.en.html)
 - [技术支持 (中文)](https://chuanhaoyi.top/support.html)
 - [Support (English)](https://chuanhaoyi.top/support.en.html)
 - [隐私政策 (中文)](https://chuanhaoyi.top/privacy.html)
